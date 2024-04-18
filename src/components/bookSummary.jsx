@@ -1,13 +1,9 @@
 /* eslint-disable react/prop-types */
-
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import notesService from "../services/notes.service";
 
-
-
-function BookCard({ book }) {
+function BookSummary({ book }) {
 
   const navigate = useNavigate();
   const [noteContent, setNoteContent] = useState(null);
@@ -29,7 +25,6 @@ function BookCard({ book }) {
     }
   }, [book.notes]);
 
-
   return (
     <div className="card card-side bg-base-100 shadow-xl">
       <div className="md:flex">
@@ -43,21 +38,8 @@ function BookCard({ book }) {
         </figure>
         {/* Text Content */}
         <div className="card-body">
-          <h2 className="card-title">
-            {book.title}
-          </h2>
-          <p className="text-lg mb-2">
-            <strong>Genre: </strong>
-            {book.genre}
-          </p>
-          <p className="text-lg mb-2">
-            <strong>Year: </strong>
-            {book.year}
-          </p>
-          <p className="text-lg mb-2">
-            <strong>Description: </strong>
-            {book.description}
-          </p>
+          <h2 className="card-title">{book.title}</h2>
+
           <p className="text-lg mb-2">
             <strong>Author: </strong>
             {book.author?.name}
@@ -73,15 +55,13 @@ function BookCard({ book }) {
             {book.reader?.name}
           </p>
           <div className="card-actions justify-end">
-          <Button
-            px={6}
-            py={3}
-            fontWeight="bold"
-            className="btn btn-primary"
-            onClick={() => navigate(`/authors/${book.author?._id}`)}
-          >
-            Author Details
-          </Button>
+            <button
+              fontWeight="bold"
+              className="btn btn-primary"
+              onClick={() => navigate(`/books/${book._id}`)}
+            >
+              Book Details
+            </button>
           </div>
         </div>
       </div>
@@ -89,4 +69,4 @@ function BookCard({ book }) {
   );
 }
 
-export default BookCard;
+export default BookSummary;

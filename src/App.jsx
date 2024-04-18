@@ -1,21 +1,38 @@
 
 import { Routes, Route } from 'react-router-dom';
 
-import './App.css';
+import HomePage from './pages/HomePage';
 
-import BookList from './components/BookList';
+import BookList from './pages/BookList';
+import BookDetails from './pages/BookDetails';
+import AddBook from './components/addBook';
+
+import AuthorList from './pages/AuthorList';
+
+import NotesCard from './components/notesCard';
+
+
 
 function App() {
   return (
-    <>
-      <h1 className="text-4xl font-bold underline">Bopi</h1>
+    
 
       <Routes>
 
-        <Route path="/" element={<BookList />} />
+        <Route path="/" element={<HomePage />} />
+        
+        <Route path="/books" element={<BookList />} />
+        <Route path="/books/:bookId" element={<BookDetails />} />
+        <Route path="/books/add" element={<AddBook />} />
+
+        <Route path='/authors' element={<AuthorList />} />
+
+        <Route path='/notes' element={<NotesCard />} />
+
+
       
       </Routes>
-    </>
+ 
   );
 }
 
