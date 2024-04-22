@@ -25,14 +25,25 @@ body {
   height: 100%;
   width: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Lexend", 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:  'Proza Libre','Cormorant Garamond', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
 
 }
+
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  font-family: 'Proza Libre', sans-serif;
+
+
+}
+
 
 
 /*  ***************  */

@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "@chakra-ui/react";
+import { Button, } from "@chakra-ui/react";
 
 
 function BookCard({ book }) {
   const navigate = useNavigate();
+
+  console.log("Book data:", book);
+  console.log("the book reader", book.reader)
 
 
   return (
@@ -41,7 +44,7 @@ function BookCard({ book }) {
 
           <p className="text-sm mb-2">
             <strong>Reader: </strong>
-            {book.reader?.name}
+            {book.reader?.name || "No reader assigned"}
           </p>
           <div className="card-actions justify-end">
             <Button

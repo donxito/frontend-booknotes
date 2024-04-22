@@ -1,7 +1,12 @@
 
 import { Routes, Route } from 'react-router-dom';
 
+import Navbar from './components/navbar';
+
 import HomePage from './pages/HomePage';
+import SignUp from './pages/signUp';
+import LogIn from './pages/logIn';
+import ProfilePage from './pages/profilePage';
 
 import BookList from './pages/BookList';
 import BookDetails from './pages/BookDetails';
@@ -14,13 +19,20 @@ import NotesCard from './components/notesCard';
 
 
 
+
+
 function App() {
   return (
+    <>
     
+    <Navbar />
 
       <Routes>
 
         <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route path="/profile" element={<ProfilePage />} />
         
         <Route path="/books" element={<BookList />} />
         <Route path="/books/:bookId" element={<BookDetails />} />
@@ -34,6 +46,7 @@ function App() {
 
       
       </Routes>
+      </>
  
   );
 }

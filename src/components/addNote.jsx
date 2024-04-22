@@ -1,39 +1,49 @@
 /* eslint-disable react/prop-types */
-// AddNote.jsx
-
 import { useState } from "react";
+import { Button, Textarea, useToast } from "@chakra-ui/react";
 import notesService from "../services/notes.service";
-import { Button } from "@chakra-ui/react";
 
-function AddNote({ bookId }) {
+function AddNote({ bookId, onNoteAdded }) {
   const [content, setContent] = useState("");
+  const toast = useToast();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleAddNote = async () => {
     try {
-      // Ensure that the content field is provided in the request body
-      if (!content) {
-        console.error("Content is required");
-        return;
-      }
-
-      // Create a new note by sending a POST request to the backend
-      await notesService.createNote({ content, bookId });
-
-      // Clear the content field after successfully creating the note
+      const response = await notesService.createNote({
+        bookId,
+        content
+      });
+      // Call the callback function to update the notes state
+      onNoteAdded(response.data);
+      // Reset the content
       setContent("");
+      // Show success toast
+      toast({
+        title: "Note added",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
     } catch (error) {
-      console.error("Error creating note:", error);
+      console.error("Error adding note:", error);
+      // Show error toast
+      toast({
+        title: "Error",
+        description: "Failed to add note",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleAddNote}>
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Notes:</span>
+          <span className="label-text">Add a note:</span>
         </label>
-        <textarea
+        <Textarea
           cols={"30"}
           rows={"10"}
           type="text"

@@ -1,8 +1,8 @@
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 import authorService from "../services/author.service"
-import booksService from "../services/book.service"
+
 
 
 
@@ -10,19 +10,9 @@ import booksService from "../services/book.service"
 function AddAuthor() {
 
     const [name, setName] = useState("");
-    const [authorBooks, setAuthorBooks] = useState([]);
     const [bio, setBio] = useState("");
+   
 
-    useEffect(() => {
-        booksService
-            .getBooks()
-            .then((response) => {
-                setAuthorBooks(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
 
 
     function handleFormSubmit(event) {
@@ -30,7 +20,6 @@ function AddAuthor() {
 
         const newAuthor = {
             name: name,
-            books: authorBooks,
             bio
         };
         authorService
@@ -75,27 +64,6 @@ function AddAuthor() {
                         onChange={(event) => setBio(event.target.value)}
                     />
                 </div>
-                
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Books:</span>
-                    </label>
-                    <select
-                        className="select select-bordered"
-                        value={authorBooks}
-                        onChange={(event) => setAuthorBooks(event.target.value)}
-                    >
-                        <option disabled>Select Books</option>
-                        {authorBooks.map((book) => (
-                            <option key={book._id} value={book._id}>
-                                {book.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-               
-
-               
                 <div className="form-control mt-6">
                     <button className="btn btn-primary">Add Author</button>
                 </div>

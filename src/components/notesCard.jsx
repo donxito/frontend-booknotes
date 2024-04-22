@@ -1,13 +1,21 @@
+/* eslint-disable react/prop-types */
 import notesService from "../services/notes.service";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+
+
 function NotesCard({ bookId }) {
-    const [notes, setNotes] = useState([]); // Initialize with an empty array
+    const [notes, setNotes] = useState([]); 
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchNotes = async () => {
+            if (!bookId) {
+                // If bookId is undefined or falsy, return early
+                return;
+            }
+    
             try {
                 const response = await notesService.getNotesByBookId(bookId);
                 setNotes(response.data);
@@ -17,13 +25,15 @@ function NotesCard({ bookId }) {
                 setLoading(false);
             }
         };
-    
+        
         fetchNotes();
     }, [bookId]);
+    
 
     return (
         <div className="p-6 border-2 border-gray-300 rounded-md shadow-md bg-white max-w-xl mx-auto">
-            <h2 className="text-2xl font-bold mb-2">Notes</h2>
+            <h2 className="text-2xl font-bold mb-2">Notes:</h2>
+           
             <ul>
                 {loading ? (
                     <li>Loading...</li>
@@ -37,6 +47,7 @@ function NotesCard({ bookId }) {
                     ))
                 )}
             </ul>
+          
         </div>
     );
 }

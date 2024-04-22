@@ -1,21 +1,26 @@
-// AddBook.jsx
-
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+
+import { AuthContext } from '../context/auth.context'
 import booksService from "../services/book.service";
 import authorService from "../services/author.service";
+import userService from "../services/user.service";
 
 function AddBook() {
+
+    const { user } = useContext(AuthContext);
+
     const [title, setTitle] = useState("");
-    const [year, setYear] = useState(0);
+    const [year, setYear] = useState("");
     const [isbn, setIsbn] = useState("");
     const [genre, setGenre] = useState("");
     const [authors, setAuthors] = useState([]);
     const [selectedAuthor, setSelectedAuthor] = useState("");
     const [description, setDescription] = useState("");
     const [reader, setReader] = useState("");
-    const [notes, setNotes] = useState([]);
+
 
     const navigate = useNavigate();
 
@@ -28,13 +33,23 @@ function AddBook() {
             .catch((error) => {
                 console.log(error);
             });
+
+        // fetch logged in user info
+        userService
+            .getUser()
+            .then((response) => {
+                setReader(response.data.name);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }, []);
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
 
         if(!selectedAuthor) {
-            console.log("please select an author");
+            console.log("Please select an author or create a new one.");
             return;
         }
 
@@ -45,13 +60,15 @@ function AddBook() {
             genre,
             author: selectedAuthor,
             description,
-            notes
+            reader: user.id,
+            notes: []
+            
         };
         booksService
             .createBook(newBook)
             .then((response) => {
                 console.log(response);
-                navigate("/books");
+                navigate("/books/" + response.data._id);
             })
             .catch((error) => {
                 console.log(error);
@@ -66,9 +83,11 @@ function AddBook() {
                     <form onSubmit={handleFormSubmit}>
                         <div className="form-control">
                             <label className="label">
+
                                 <span className="label-text">Title</span>
                             </label>
                             <input
+                                required
                                 type="text"
                                 placeholder="Title"
                                 className="input input-bordered"
@@ -82,7 +101,7 @@ function AddBook() {
                             </label>
                             <input
                                 type="number"
-                                placeholder="Year"
+                                placeholder="1000"
                                 className="input input-bordered"
                                 value={year}
                                 onChange={(event) => setYear(event.target.value)}
@@ -93,6 +112,7 @@ function AddBook() {
                                 <span className="label-text">ISBN</span>
                             </label>
                             <input
+                                required
                                 type="text"
                                 placeholder="ISBN"
                                 className="input input-bordered"
@@ -119,10 +139,7 @@ function AddBook() {
                             <select
                                 className="select select-bordered"
                                 value={selectedAuthor}
-                                onChange={(event) => {
-                                    setSelectedAuthor(event.target.value);
-                                    console.log(event.target.value);
-                                }}
+                                onChange={(event) => setSelectedAuthor(event.target.value)}
                             >
                                 <option>Select Author</option>
                                 {authors.map((author) => (
@@ -131,6 +148,13 @@ function AddBook() {
                                     </option>
                                 ))}
                             </select>
+                
+                            <p className="mt-2 text-sm">
+                                Don't see the author you're looking for?{" "}
+                                <Link to="/authors/add" className="text-primary text-sm underline">
+                                    Add a new author
+                                </Link>
+                            </p>
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -138,25 +162,14 @@ function AddBook() {
                             </label>
                             <textarea
                                 type="text"
-                                placeholder="Description"
+                                placeholder="Describe this book"
                                 className="input input-bordered"
                                 value={description}
                                 onChange={(event) => setDescription(event.target.value)}
                             />
                         </div>
 
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Notes</span>
-                            </label>
-                            <textarea
-                                type="text"
-                                placeholder="Notes"
-                                className="input input-bordered"
-                                value={notes.join("\n")} // Join the array elements with newline characters
-                                onChange={(event) => setNotes(event.target.value.split("\n"))} // Split the textarea value into an array
-                            />
-                        </div>
+
                         <div className="form-control mt-6">
                             <button className="btn btn-primary">Add Book</button>
                         </div>

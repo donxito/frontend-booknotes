@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 
 import booksService from "../services/book.service";
-
 import BookSummary from "../components/bookSummary";
 
 function BookList() {
@@ -30,8 +29,8 @@ function BookList() {
 
     return (
         <div>
-           <h1 className="text-4xl font-bold underline">My Book Notes</h1>
-           <h2 className="text-quick font-bold">Books</h2>
+           <h2 className="text-4xl font-bold underline" >Books:</h2>
+
             <ul>
                 {loading ? (
                     <li>Loading...</li>

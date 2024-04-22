@@ -1,28 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
-import notesService from "../services/notes.service";
 
 function BookSummary({ book }) {
-  const navigate = useNavigate();
-  const [noteContent, setNoteContent] = useState(null);
 
-  useEffect(() => {
-    const fetchNoteContent = async () => {
-      try {
-        if (book.notes && book.notes.length > 0) { // Check if notes exist
-          const noteId = book.notes[0]._id; // Assuming only one note per book for simplicity
-          const response = await notesService.getNote(noteId);
-          setNoteContent(response.data.content);
-        } else {
-          setNoteContent("No notes available for this book");
-        }
-      } catch (error) {
-        console.error("Error fetching note:", error);
-      }
-    };
-    fetchNoteContent();
-  }, [book.notes]);
+  const navigate = useNavigate();
+
+
+
 
   return (
     <div className="card card-side bg-base-100 shadow-xl">
@@ -48,8 +33,8 @@ function BookSummary({ book }) {
           </p>
 
           <p className="text-sm mb-2">
-            <strong>Note: </strong>
-            {noteContent}
+            <strong>Year: </strong>
+            {book.year}
           </p>
           <p className="text-sm mb-2">
             <strong>Reader: </strong>
