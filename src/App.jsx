@@ -8,6 +8,7 @@ import BookDetails from './pages/BookDetails';
 import AddBook from './components/addBook';
 
 import AuthorList from './pages/AuthorList';
+import AddAuthor from './components/addAuthor';
 
 import NotesCard from './components/notesCard';
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/books/add" element={<AddBook />} />
 
         <Route path='/authors' element={<AuthorList />} />
+        <Route path='/authors/add' element={<AddAuthor />} />
 
         <Route path='/notes' element={<NotesCard />} />
 

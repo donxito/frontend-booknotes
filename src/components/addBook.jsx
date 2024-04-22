@@ -15,7 +15,7 @@ function AddBook() {
     const [selectedAuthor, setSelectedAuthor] = useState("");
     const [description, setDescription] = useState("");
     const [reader, setReader] = useState("");
-    const [notes, setNotes] = useState("");
+    const [notes, setNotes] = useState([]);
 
     const navigate = useNavigate();
 
@@ -32,6 +32,12 @@ function AddBook() {
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
+
+        if(!selectedAuthor) {
+            console.log("please select an author");
+            return;
+        }
+
         const newBook = {
             title,
             year,
@@ -67,7 +73,7 @@ function AddBook() {
                                 placeholder="Title"
                                 className="input input-bordered"
                                 value={title}
-                                onChange={(e) => setTitle(e.target.value)}
+                                onChange={(event) => setTitle(event.target.value)}
                             />
                         </div>
                         <div className="form-control">
@@ -79,7 +85,7 @@ function AddBook() {
                                 placeholder="Year"
                                 className="input input-bordered"
                                 value={year}
-                                onChange={(e) => setYear(e.target.value)}
+                                onChange={(event) => setYear(event.target.value)}
                             />
                         </div>
                         <div className="form-control">
@@ -91,7 +97,7 @@ function AddBook() {
                                 placeholder="ISBN"
                                 className="input input-bordered"
                                 value={isbn}
-                                onChange={(e) => setIsbn(e.target.value)}
+                                onChange={(event) => setIsbn(event.target.value)}
                             />
                         </div>
                         <div className="form-control">
@@ -103,7 +109,7 @@ function AddBook() {
                                 placeholder="Genre"
                                 className="input input-bordered"
                                 value={genre}
-                                onChange={(e) => setGenre(e.target.value)}
+                                onChange={(event) => setGenre(event.target.value)}
                             />
                         </div>
                         <div className="form-control">
@@ -113,9 +119,12 @@ function AddBook() {
                             <select
                                 className="select select-bordered"
                                 value={selectedAuthor}
-                                onChange={(e) => setSelectedAuthor(e.target.value)}
+                                onChange={(event) => {
+                                    setSelectedAuthor(event.target.value);
+                                    console.log(event.target.value);
+                                }}
                             >
-                                <option disabled>Select Author</option>
+                                <option>Select Author</option>
                                 {authors.map((author) => (
                                     <option key={author._id} value={author._id}>
                                         {author.name}
@@ -127,25 +136,25 @@ function AddBook() {
                             <label className="label">
                                 <span className="label-text">Description</span>
                             </label>
-                            <input
+                            <textarea
                                 type="text"
                                 placeholder="Description"
                                 className="input input-bordered"
                                 value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                                onChange={(event) => setDescription(event.target.value)}
                             />
                         </div>
-                       
+
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Notes</span>
                             </label>
-                            <input
+                            <textarea
                                 type="text"
                                 placeholder="Notes"
                                 className="input input-bordered"
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
+                                value={notes.join("\n")} // Join the array elements with newline characters
+                                onChange={(event) => setNotes(event.target.value.split("\n"))} // Split the textarea value into an array
                             />
                         </div>
                         <div className="form-control mt-6">

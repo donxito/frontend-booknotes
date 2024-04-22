@@ -20,8 +20,9 @@ class NoteService {
 
     // POST /notes
     createNote = (requestBody) => {
+        console.log(requestBody)
         return this.api.post("/notes", requestBody)
-    }
+    }   
 
     // GET /notes
     getNotes = () => {
@@ -31,6 +32,11 @@ class NoteService {
     // GET /notes/:noteId
     getNote = (noteId) => {
         return this.api.get(`/notes/${noteId}`);
+    }
+
+    // GET /books/:bookId/notes
+    getNotesByBookId = (bookId) => {
+        return this.api.get(`/books/${bookId}/notes`);
     }
 
     // PUT /notes/:noteId

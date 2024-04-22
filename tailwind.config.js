@@ -8,7 +8,7 @@ export default {
     'node_modules/react-daisyui/dist/**/*.js',
   ],
   
-  plugins: [require("daisyui")],
+  plugins: [require('@tailwindcss/forms'), require("daisyui") ],
 
   daisyui: {
     themes: ["retro", "pastel", "forest"],
