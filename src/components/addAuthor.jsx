@@ -1,5 +1,6 @@
 
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 import authorService from "../services/author.service"
 
@@ -11,9 +12,8 @@ function AddAuthor() {
 
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
-   
 
-
+    const navigate = useNavigate();
 
     function handleFormSubmit(event) {
         event.preventDefault();
@@ -30,6 +30,8 @@ function AddAuthor() {
             .catch((error) => {
                 console.log(error);
             });
+
+            navigate("/authors");
     }
 
 

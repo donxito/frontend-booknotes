@@ -1,23 +1,25 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import booksService from "../services/book.service";
 import BookCard from "../components/bookCard";
 import AddNote from "../components/addNote";
 import notesService from "../services/notes.service";
 import userService from "../services/user.service";
+import { AuthContext } from "../context/auth.context";
 
 import { Box, Text, Heading, Divider, Center, Grid } from "@chakra-ui/react";
 
 function BookDetails() {
   const { bookId } = useParams();
+
+  const { isLoggedIn } = useContext(AuthContext);
+
   const [book, setBook] = useState(null);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(" this Book details:", book);
-  console.log("the notes are:", notes);
-
+  // fetch the book and notes from the server using the booksService
   useEffect(() => {
     const fetchBookAndNotes = async () => {
       try {
@@ -32,6 +34,7 @@ function BookDetails() {
     fetchBookAndNotes();
   }, [bookId]);
 
+  // Fetch notes for the book
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -77,7 +80,7 @@ function BookDetails() {
               size="md"
               mb={3}
               style={{
-                fontSize: "2rem",
+                fontSize: "1.7rem",
                 fontWeight: "bold",
                 textAlign: "center",
                 textDecoration: "underline",
@@ -128,10 +131,13 @@ function BookDetails() {
               )}
             </Grid>
           </Box>
-          <AddNote
-            bookId={book._id}
-            onNoteAdded={(newNote) => setNotes([...notes, newNote])}
-          />
+          {/* Allow only logged-in users to add notes */}
+          {isLoggedIn && (
+            <AddNote
+              bookId={book._id}
+              onNoteAdded={(newNote) => setNotes([...notes, newNote])}
+            />
+          )}
         </>
       ) : (
         <Center>Book not found</Center>

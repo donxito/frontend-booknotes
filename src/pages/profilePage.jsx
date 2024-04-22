@@ -24,14 +24,17 @@ function ProfilePage() {
         const fetchBooks = async () => {
             try {
                 const booksResponse = await booksService.getBooks();
-                setBooks(booksResponse.data);
+                const userBooks = booksResponse.data.filter(book => book.reader?._id === user._id);
+                setBooks(userBooks);
             } catch (error) {
                 console.error("Error fetching books:", error);
             }
         };
-    
-        fetchBooks();
-       
+        if (user) {
+            fetchBooks();
+
+        }
+        
     }, [user])    
     
     
