@@ -32,19 +32,19 @@ function BookCard({ book }) {
   console.log("the user", user)
 
   return (
-    <div className="card card-side bg-base-100 shadow-xl">
+    <div className="card card-side bg-base-200 border border-gray-300 rounded-md shadow-md">
       <div className="md:flex">
         {/* Image Container */}
-        <figure>
+        <figure className="md:w-1/2">
           <img
             src={book.coverURL}
             alt={book.title}
-            className="h-48 w-full object-cover md:h-full md:w-48"
+            className="h-48 w-full object-cover md:h-full md:w-full" 
           />
         </figure>
         {/* Text Content */}
-        <div className="card-body">
-          <h2 className="card-title">{book.title}</h2>
+        <div className="card-body md:w-1/2"> 
+        <h2 className="card-title text-2xl my-2">{book.title}</h2>
           <p className="text-sm mb-2">
             <strong>Genre: </strong>
             {book.genre}
@@ -79,12 +79,12 @@ function BookCard({ book }) {
             ))}
           </div>
 
-          <div className="card-actions justify-end">
+          <div className="card-actions justify-end my-4">
             <Button
               px={6}
               py={3}
               fontWeight="bold"
-              className="btn btn-primary"
+              className="btn btn-secondary"
               onClick={() => navigate(`/authors/${book.author?._id}`)}
             >
               Author Details

@@ -68,81 +68,104 @@ function BookDetails() {
   }, [bookId]);
 
   return (
-    <Box p={4}>
-      {loading ? (
-        <Center>Loading...</Center>
-      ) : book ? (
-        <>
-          <BookCard book={book} />
-          <Divider my={4} />
-          <Box>
-            <Heading
-              size="md"
-              mb={3}
-              style={{
-                fontSize: "1.7rem",
-                fontWeight: "bold",
-                textAlign: "center",
-                textDecoration: "underline",
-              }}
-            >
-              "{book.title}" notes
-            </Heading>
-            <Grid
-              templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
-              gap={4}
-            >
-              {notes && notes.length > 0 ? (
-                notes.map((note) => (
-                  <Box
-                    key={note._id}
-                    p={4}
-                    boxShadow="md"
-                    borderRadius="md"
-                    border="1px"
-                    borderColor="gray.200"
-                  >
-                    <Text style={{ fontSize: "20px" }}>{note.content}</Text>
-                    <Box>
+    <div className="flex flex-col items-center">
+      <Box p={4}>
+        <h2 className="text-3xl font-bold underline my-4 text-center">
+          Book Details
+        </h2>
+        {loading ? (
+          <Center>Loading...</Center>
+        ) : book ? (
+          <>
+            <BookCard book={book} />
+            <Divider my={4} />
+            <Box>
+              <Heading
+                size="md"
+                mb={3}
+                p={6}
+                m={6}
+                style={{
+                  fontSize: "1.5rem",
+                  textAlign: "center",
+                  textDecoration: "underline",
+                }}
+              >
+                "{book.title}" notes
+              </Heading>
+              <Grid
+                templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+                gap={4}
+              >
+                {notes && notes.length > 0 ? (
+                  notes.map((note) => (
+                    <Box
+                      key={note._id}
+                      p={4} // Padding
+                      m={4} // Margin to create space between cards
+                      boxShadow="md" // Shadow
+                      borderRadius="md" // Rounded corners
+                      border="3px" // Border
+                      borderColor="gray.200" // Border color
+                      backgroundColor="#E4D7B4" // Background color
+                      style={{ maxHeight: "300px", overflowY: "auto" }} // Set maximum height and enable overflow handling
+                    >
+                      {/* Apply styles to contain the text within the card */}
                       <Text
                         style={{
-                          fontSize: "16px",
-                          color: "gray",
-                          fontStyle: "italic",
+                          textAlign: "left",
+                          fontSize: "20px",
+                          lineHeight: "1.4",
+                          padding: "8px",
+                          margin: "8px",
+                          wordWrap: "break-word", // Enable word wrapping
                         }}
                       >
-                        {note.user.name}
-
+                        {note.content}
+                      </Text>
+                      <Box>
                         <Text
                           style={{
-                            fontSize: "12px",
+                            textAlign: "right",
+                            fontSize: "16px",
                             color: "gray",
                             fontStyle: "italic",
+                            padding: "8px",
+                            margin: "8px",
                           }}
                         >
-                          {new Date(note.createdAt).toLocaleDateString()}
+                          {note.user.name}
+                          <Text
+                            style={{
+                              fontSize: "12px",
+                              color: "gray",
+                              fontStyle: "italic",
+                            }}
+                          >
+                            {new Date(note.createdAt).toLocaleDateString()}
+                          </Text>
                         </Text>
-                      </Text>
+                      </Box>
                     </Box>
-                  </Box>
-                ))
-              ) : (
-                <Text>No notes available for this book.</Text>
-              )}
-            </Grid>
-          </Box>
-          {/* Allow only logged-in users to add notes */}
-          {isLoggedIn && (
-            <AddNote
-              bookId={book._id}
-              onNoteAdded={(newNote) => setNotes([...notes, newNote])}
-            />
-          )}
-        </>
-      ) : (
-        <Center>Book not found</Center>
-      )}
-    </Box>
+                  ))
+                ) : (
+                  <Text>No notes available for this book.</Text>
+                )}
+              </Grid>
+            </Box>
+            {/* Allow only logged-in users to add notes */}
+            {isLoggedIn && (
+              <AddNote
+                bookId={book._id}
+                onNoteAdded={(newNote) => setNotes([...notes, newNote])}
+              />
+            )}
+          </>
+        ) : (
+          <Center>Book not found</Center>
+        )}
+      </Box>
+    </div>
   );
 }
 

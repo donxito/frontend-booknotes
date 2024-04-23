@@ -28,7 +28,7 @@ function BookSummary({ book }) {
   }
 
   return (
-    <div className="card card-side bg-base-100 shadow-xl">
+    <div className="card card-side bg-base-200 border border-gray-300 rounded-md shadow-md">
       <div className="md:flex">
         <figure>
           <img
@@ -38,7 +38,7 @@ function BookSummary({ book }) {
           />
         </figure>
         <div className="card-body">
-          <h1 className="card-title">{book.title}</h1>
+          <h2 className="card-title text-2xl my-2">{book.title}</h2>
           
           <p className="text-sm mb-2">
             <strong>Author: </strong>
@@ -55,7 +55,7 @@ function BookSummary({ book }) {
             {book.year}
           </p>
           <p className="text-sm mb-2">
-            <strong>Reader: </strong>
+            <strong>Posted by: </strong>
             {book.reader?.name}
           </p>
 
@@ -71,7 +71,7 @@ function BookSummary({ book }) {
             ))}
           </div>
 
-          <div className="card-actions justify-end">
+          <div className="card-actions justify-end my-4">
             <button
               fontWeight="bold"
               className="btn btn-primary"
