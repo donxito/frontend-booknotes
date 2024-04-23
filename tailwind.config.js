@@ -11,7 +11,7 @@ export default {
   plugins: [require('@tailwindcss/forms'), require("daisyui") ],
 
   daisyui: {
-    themes: ["retro", "pastel", "forest"],
+    themes: ["retro", "pastel", "forest", "lemonade", "fantasy", "garden"],
     darkTheme: "forest", // name of one of the included themes for dark mode
     base: true, // applies background color and foreground color for root element by default
     styled: true, // include daisyUI colors and design decisions for all components

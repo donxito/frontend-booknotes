@@ -1,15 +1,20 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import booksService from "../services/book.service";
 import authorsService from "../services/author.service";
+import { AuthContext } from "../context/auth.context";
 
 import { Box, Text, Heading, Button } from "@chakra-ui/react";
 
 function AuthorCard({ author, onDelete }) {
+
   const { authorId } = useParams();
 
   const [books, setBooks] = useState([]);
+
+  const { isLoggedIn } = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,13 +80,13 @@ function AuthorCard({ author, onDelete }) {
           </Box>
 
           {/* Button to edit the author */}
-
-          <div className="card-actions justify-end my-4">
+          {isLoggedIn && (
+          <div className="card-actions justify-end my-6">
             <Button
               px={6}
               py={3}
               fontWeight="bold"
-              className="btn btn-secondary"
+              className="btn btn-primary"
               onClick={() => navigate(`/authors/${author._id}/edit`)}
             >
               Edit
@@ -92,12 +97,29 @@ function AuthorCard({ author, onDelete }) {
               px={6}
               py={3}
               fontWeight="bold"
-              className="btn btn-secondary"
+              className="btn btn-primary"
               onClick={() => handleDeleteAuthor(author._id)}
             >
               Delete
             </Button>
           </div>
+          )}
+
+            {/* Button to go back */}
+            <div className="card-actions justify-end my-4">
+            <Button
+              px={6}
+              py={3}
+              fontWeight="bold"
+              className="btn btn-secondary"
+              onClick={() => navigate(`/books`)}
+            >
+              Back
+            </Button>
+          </div>
+
+
+
         </Box>
       </div>
     </div>

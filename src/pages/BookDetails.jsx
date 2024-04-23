@@ -24,6 +24,7 @@ function BookDetails() {
     const fetchBookAndNotes = async () => {
       try {
         const bookResponse = await booksService.getBook(bookId);
+        console.log("fetched book:", bookResponse.data);
         setBook(bookResponse.data);
         setLoading(false);
       } catch (error) {
@@ -40,6 +41,7 @@ function BookDetails() {
       try {
         const notesResponse = await notesService.getNotesByBookId(bookId);
         let fetchedNotes = notesResponse.data;
+        console.log("fetched notes:", fetchedNotes);
 
         // Fetch user info for each note
         const notesWithUser = await Promise.all(
@@ -56,6 +58,7 @@ function BookDetails() {
         const sortedNotes = notesWithUser.sort(
           (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
         );
+        console.log("sorted notes:", sortedNotes);
 
         // Update the state with sorted notes
         setNotes(sortedNotes);
@@ -63,9 +66,12 @@ function BookDetails() {
         console.error("Error fetching notes:", error);
       }
     };
+    if (book) {
+      fetchNotes();
+    }
+  }, [bookId, book, setNotes]);
 
-    fetchNotes();
-  }, [bookId]);
+  console.log("rendering notes", notes);
 
   return (
     <div className="flex flex-col items-center">
@@ -77,7 +83,7 @@ function BookDetails() {
           <Center>Loading...</Center>
         ) : book ? (
           <>
-            <BookCard book={book} />
+          <BookCard book={book} />
             <Divider my={4} />
             <Box>
               <Heading
@@ -93,6 +99,8 @@ function BookDetails() {
               >
                 "{book.title}" notes
               </Heading>
+
+              {/* Display notes */}
               <Grid
                 templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
                 gap={4}
@@ -154,6 +162,7 @@ function BookDetails() {
               </Grid>
             </Box>
             {/* Allow only logged-in users to add notes */}
+            {console.log("isLoggedIn:", isLoggedIn)}
             {isLoggedIn && (
               <AddNote
                 bookId={book._id}

@@ -11,24 +11,22 @@ function HomePage() {
   return (
     <div className="hero min-h-screen" style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover'}}>
     
-    <div className="hero-overlay bg-opacity-60"></div>
+    <div className="hero-overlay bg-opacity-70"></div>
     <div className="hero-content text-left text-neutral-content">
     
-
- 
         <div className="max-w-md">
-        <h1 className="text-9xl font-bold " >Mini Book Club</h1>
-        <p className="py-7 text-2xl font-bold">A simple note taking app, where you can post your thoughts about any book</p>
+        <h1 className="text-9xl font-bold text-amber-100" >Mini Book Club</h1>
+        <p className="py-7 text-2xl font-bold text-amber-100">A simple note taking app, where you can post your thoughts about any book</p>
     
             <Link to={"/books"}>
             <button className="btn btn-primary">See Books</button>
             </Link>
 
             {isLoggedIn ? (
-            <button className="ml-4 btn btn-primary" onClick={logOutUser}>Logout</button>
+            <button className="ml-4 btn btn-secondary" onClick={logOutUser}>Logout</button>
           ) : (
             <>
-              <p className="py-7 text-2xl font-bold">Sign Up/ Login to get started</p>
+              <p className="py-7 text-2xl font-bold text-amber-100">Sign Up/ Login to get started</p>
               <Link to={"/signup"}>
                 <button className="mr-4 btn btn-secondary">Sign Up</button>
               </Link>
