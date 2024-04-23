@@ -1,16 +1,12 @@
-/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
-import { AuthContext } from '../context/auth.context'
 import booksService from "../services/book.service";
-import authorService from "../services/author.service";
-import userService from "../services/user.service";
+import authorsService from "../services/author.service";
 
-function AddBook() {
-
-    const { user } = useContext(AuthContext);
+function EditBook() {
 
     const [title, setTitle] = useState("");
     const [year, setYear] = useState("");
@@ -20,12 +16,29 @@ function AddBook() {
     const [selectedAuthor, setSelectedAuthor] = useState("");
     const [description, setDescription] = useState("");
     const [reader, setReader] = useState("");
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
+    const { bookId } = useParams();
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        authorService
+        booksService
+            .getBook(bookId)
+            .then((response) => {
+                setTitle(response.data.title);
+                setYear(response.data.year);
+                setIsbn(response.data.isbn);
+                setGenre(response.data.genre);
+                setDescription(response.data.description);
+                setReader(response.data.reader);
+                setSelectedAuthor(response.data.author._id);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        authorsService
             .getAuthors()
             .then((response) => {
                 setAuthors(response.data);
@@ -33,53 +46,38 @@ function AddBook() {
             .catch((error) => {
                 console.log(error);
             });
-
-        // fetch logged in user info
-        userService
-            .getUser()
-            .then((response) => {
-                setReader(response.data.name);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
+    }, [bookId]);
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
-
-        if(!selectedAuthor) {
-            console.log("Please select an author or create a new one.");
-            return;
-        }
-
-        const newBook = {
+        const requestBody = {
             title,
             year,
             isbn,
             genre,
             author: selectedAuthor,
             description,
-            reader: user.id,
-            notes: []
-            
+        
         };
         booksService
-            .createBook(newBook)
+            .updateBook(bookId, requestBody)
             .then((response) => {
-                console.log(response);
-                navigate("/books/" + response.data._id);
+                console.log("Book updated successfully:", response);
+                setFormSubmitted(true)
+                navigate(`/books/${bookId}`);
             })
             .catch((error) => {
                 console.log(error);
             });
-    };
+    }
+
+
 
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className="card w-96 bg-base-100 shadow-xl">
                 <div className="card-body">
-                    <h2 className="card-title">Add Book</h2>
+                    <h2 className="card-title">Edit Book</h2>
                     <form onSubmit={handleFormSubmit}>
                         <div className="form-control">
                             <label className="label">
@@ -172,7 +170,7 @@ function AddBook() {
 
 
                         <div className="form-control mt-6">
-                            <button className="btn btn-primary">Add Book</button>
+                            <button className="btn btn-primary">Edit Book</button>
                         </div>
                     </form>
                 </div>
@@ -181,4 +179,7 @@ function AddBook() {
     );
 }
 
-export default AddBook;
+
+
+
+export default EditBook

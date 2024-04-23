@@ -28,7 +28,7 @@ function BookSummary({ book }) {
   }
 
   return (
-    <div className="card card-side bg-base-200 border border-gray-300 rounded-md shadow-md">
+    <div className="card card-side bg-base-200 border border-gray-300 shadow-md rounded-md max-w-md mx-auto">
       <div className="md:flex">
         <figure>
           <img

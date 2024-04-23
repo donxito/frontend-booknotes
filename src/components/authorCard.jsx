@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import booksService from "../services/book.service";
+import authorsService from "../services/author.service";
 
-import { Box, Text, Heading} from "@chakra-ui/react";
+import { Box, Text, Heading, Button } from "@chakra-ui/react";
 
-function AuthorCard({ author }) {
+function AuthorCard({ author, onDelete }) {
+  const { authorId } = useParams();
 
-  
   const [books, setBooks] = useState([]);
-  const {authorId} = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getBooks = async () => {
@@ -24,38 +25,82 @@ function AuthorCard({ author }) {
         console.log("Error fetching books:", error);
       }
     };
-  
-    getBooks();
-  }, [authorId]);
-  
 
+    getBooks();
+  }, [authorId, author]);
+
+  const handleDeleteAuthor = async (authorId) => {
+    try {
+      await authorsService.deleteAuthor(authorId);
+      // Call onDelete function passed from parent component to trigger refresh
+      onDelete(authorId);
+      navigate("/authors", { replace: true });
+    } catch (error) {
+      console.error("Error deleting author:", error);
+    }
+  };
+
+  console.table("author data:", author);
 
   return (
-    <Box
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      bg="gray.100"
-      boxShadow="md"
-      p="4"
-    >
-      <Heading  style={{ fontSize: "1.6rem", fontFamily: "Proza Libre"}}>
-        {author.name}
-      </Heading>
-      <Text fontSize="lg" mb="4">
-        <strong>Bio: </strong> {author.bio}
-      </Text>
-      <Box>
-        <strong>Books: </strong>
-        <ul>
-          {books.map((book) => (
-            <li key={book._id}>
-              <Link to={`/books/${book._id}`} style={{ fontSize: "1.6rem", color: "primary"}}>{book.title}</Link>
-            </li>
-          ))}
-        </ul>
-      </Box>
-    </Box>
+    <div className="card-side bg-base-200 border border-gray-300 shadow-md rounded-md max-w-md mx-auto">
+      <div className="md:flex">
+        <Box
+          borderRadius="lg"
+          overflow="hidden"
+          bg="gray.100"
+          boxShadow="md"
+          p="30"
+        >
+          <Heading style={{ fontSize: "1.6rem", fontFamily: "Proza Libre" }}>
+            {author.name}
+          </Heading>
+          <Text fontSize="lg" mb="4">
+            <strong>Bio: </strong> {author.bio}
+          </Text>
+          <Box>
+            <strong>Books: </strong>
+            <ul>
+              {books.map((book) => (
+                <li key={book._id}>
+                  <Link
+                    to={`/books/${book._id}`}
+                    className="text-secondary text-lg underline"
+                  >
+                    {book.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Box>
+
+          {/* Button to edit the author */}
+
+          <div className="card-actions justify-end my-4">
+            <Button
+              px={6}
+              py={3}
+              fontWeight="bold"
+              className="btn btn-secondary"
+              onClick={() => navigate(`/authors/${author._id}/edit`)}
+            >
+              Edit
+            </Button>
+
+            {/* Button to delete the author */}
+            <Button
+              px={6}
+              py={3}
+              fontWeight="bold"
+              className="btn btn-secondary"
+              onClick={() => handleDeleteAuthor(author._id)}
+            >
+              Delete
+            </Button>
+          </div>
+        </Box>
+      </div>
+    </div>
   );
 }
 

@@ -11,15 +11,15 @@ import ProfilePage from './pages/profilePage';
 import BookList from './pages/BookList';
 import BookDetails from './pages/BookDetails';
 import AddBook from './components/addBook';
+import EditBook from './pages/editBook';
 
 import AuthorList from './pages/AuthorList';
 import AddAuthor from './components/addAuthor';
 import AuthorDetails from './pages/AuthorDetails';
+import EditAuthor from './pages/editAuthor';
+
 
 import NotesCard from './components/notesCard';
-
-
-
 
 
 function App() {
@@ -38,10 +38,12 @@ function App() {
         <Route path="/books" element={<BookList />} />
         <Route path="/books/:bookId" element={<BookDetails />} />
         <Route path="/books/add" element={<AddBook />} />
+        <Route path="/books/:bookId/edit" element={<EditBook />} />
 
         <Route path='/authors' element={<AuthorList />} />
         <Route path='/authors/add' element={<AddAuthor />} />
         <Route path='/authors/:authorId' element={<AuthorDetails />} />
+        <Route path='/authors/:authorId/edit' element={<EditAuthor />} />
 
         <Route path='/notes' element={<NotesCard />} />
 

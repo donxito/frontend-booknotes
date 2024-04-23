@@ -54,7 +54,7 @@ function ProfilePage() {
     <div className="ProfilePage ">
     <div className="flex">
     <section className="profile p-6 bg-white shadow-md rounded-md max-w-md mx-auto mr-4">
-    <h1 className="text-2xl font-bold mb-4">Welcome, {user.name}!</h1>
+    <h2 className="text-2xl font-bold mb-4">Welcome, {user.name}!</h2>
     <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Email:</h2>
         <p>{user.email}</p>

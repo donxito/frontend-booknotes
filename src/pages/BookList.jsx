@@ -34,7 +34,7 @@ function BookList() {
         <div className="flex flex-wrap justify-center ">
           {books.map((book) => (
             <div key={book._id} className="m-4">
-              <BookSummary book={book} />
+              <BookSummary book={book} /> {/* Pass the book object as a prop */}
             </div>
           ))}
         </div>
