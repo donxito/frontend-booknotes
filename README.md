@@ -92,6 +92,7 @@ Add the following environment variables in `.env` files:
 
 <img width="2051" alt="Screenshot 2024-04-24 at 17 57 24" src="https://github.com/donxito/frontend-booknotes/assets/96595540/029680eb-c547-4af4-9137-498763d1b7e7">
 
+<img width="914" alt="Screenshot 2024-04-24 at 18 25 25" src="https://github.com/donxito/frontend-booknotes/assets/96595540/1b39dbe2-0e3d-478c-9a00-24abb4fadf0e">
 
 
 
