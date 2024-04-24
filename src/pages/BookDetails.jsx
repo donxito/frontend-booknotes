@@ -8,7 +8,7 @@ import notesService from "../services/notes.service";
 import userService from "../services/user.service";
 import { AuthContext } from "../context/auth.context";
 
-import { Box, Text, Heading, Divider, Center, Grid} from "@chakra-ui/react";
+import { Box, Text, Heading, Divider, Center, Grid } from "@chakra-ui/react";
 
 function BookDetails() {
   const { bookId } = useParams();
@@ -83,9 +83,9 @@ function BookDetails() {
           <Center>Loading...</Center>
         ) : book ? (
           <>
-          <Box w="full">
-          <BookCard book={book} />
-          </Box>
+            <Box w="full">
+              <BookCard book={book} />
+            </Box>
             <Divider my={4} />
             <Box>
               <Heading
@@ -113,14 +113,13 @@ function BookDetails() {
                       key={note._id}
                       p={4} // Padding
                       m={4} // Margin to create space between cards
-                      boxShadow="lg" 
-                      borderRadius="lg" 
-                      borderWidth="1px" 
+                      boxShadow="lg"
+                      borderRadius="lg"
+                      borderWidth="1px"
                       borderColor="gray.300"
-                      backgroundColor="gray.200" 
+                      backgroundColor="gray.200"
                       style={{ maxHeight: "300px", overflowY: "auto" }} // Set maximum height and enable overflow handling
                     >
-
                       <Text
                         style={{
                           textAlign: "left",
