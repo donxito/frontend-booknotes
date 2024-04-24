@@ -7,7 +7,7 @@ import notesService from "../services/notes.service";
 import userService from "../services/user.service";
 import { AuthContext } from "../context/auth.context";
 
-import BookCard from "../../src/components/bookCard"
+import BookCard from "../components/bookCard"
 
 
 
