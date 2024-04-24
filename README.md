@@ -92,8 +92,7 @@ Add the following environment variables in `.env` files:
 
 <img width="2051" alt="Screenshot 2024-04-24 at 17 57 24" src="https://github.com/donxito/frontend-booknotes/assets/96595540/029680eb-c547-4af4-9137-498763d1b7e7">
 <img width="914" alt="Screenshot 2024-04-24 at 18 25 25" src="https://github.com/donxito/frontend-booknotes/assets/96595540/1b39dbe2-0e3d-478c-9a00-24abb4fadf0e">
-<img width="2056" alt="Screenshot 2024-04-24 at 23 <img width="997" alt="Screenshot 2024-04-24 at 23 32 41" src="https://github.com/donxito/frontend-booknotes/assets/96595540/25c5aa1f-1989-4dd7-a52b-e9fcaf8656f1">
-04 25" src="https://github.com/donxito/frontend-booknotes/assets/96595540/67b65b79-aa63-4946-9cdd-10ae759f3a02">
+<img width="997" alt="Screenshot 2024-04-24 at 23 32 41" src="https://github.com/donxito/frontend-booknotes/assets/96595540/25c5aa1f-1989-4dd7-a52b-e9fcaf8656f1">
 <img width="558" alt="Screenshot 2024-04-24 at 23 03 22" src="https://github.com/donxito/frontend-booknotes/assets/96595540/43e20cc2-dd2a-461c-b8e1-d7d37815031e">
 <img width="2056" alt="Screenshot 2024-04-24 at 23 03 11" src="https://github.com/donxito/frontend-booknotes/assets/96595540/69eaca37-0b1c-49a8-87bb-836a6c4a1854">
 
