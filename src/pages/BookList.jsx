@@ -25,8 +25,8 @@ function BookList() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-3xl font-bold underline my-4">Books</h2>
+    <div className="flex flex-col items-center my-40">
+      <h2 className="text-3xl font-bold underline my-8">Books</h2>
 
       {loading ? (
         <p>Loading...</p>
@@ -41,7 +41,9 @@ function BookList() {
       ) : (
         <p>No books found</p>
       )}
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
+    
   );
 }
 

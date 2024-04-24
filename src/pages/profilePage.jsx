@@ -51,9 +51,9 @@ function ProfilePage() {
 
 
   return (
-    <div className="ProfilePage ">
+    <div className="ProfilePage my-40 flex justify-center items-center">
     <div className="flex">
-    <section className="profile p-6 bg-white shadow-md rounded-md max-w-md mx-auto mr-4">
+    <section className="profile p-6 bg-white shadow-md rounded-md max-w-md mx-auto mr-4 ">
     <h2 className="text-2xl font-bold mb-4">Welcome, {user.name}!</h2>
     <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Email:</h2>
@@ -76,7 +76,7 @@ function ProfilePage() {
     </Button>
     </section>
 
-        <section className="events p-6 bg-white shadow-md rounded-md  mx-auto">
+        <section className="events p-6 bg-white shadow-md rounded-md  mx-auto mr-4 ">
     <h2 className="text-lg font-semibold mb-2">My Books:</h2>
     {books.length > 0 && (
         <div className="user-books">  
@@ -88,6 +88,7 @@ function ProfilePage() {
      )}
       </section>
       </div>
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
       </div>
       
 )}

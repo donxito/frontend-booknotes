@@ -36,8 +36,8 @@ function LogIn() {
   };
 
   return (
-    <div className="LoginPage p-6 bg-white shadow-md rounded-md max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
+    <div className="LoginPage p-6 bg-white shadow-md rounded-md max-w-md mx-auto my-40">
+      <h2 className="text-2xl font-bold mb-4 my-8">Login</h2>
 
       <form onSubmit={handleLoginSubmit}>
         <label className="block mb-2">Email:</label>
@@ -58,7 +58,7 @@ function LogIn() {
           onChange={handlePassword}
         />
 
-        <Button type="submit" className="btn mt-4">
+        <Button type="submit" className="btn ml-4">
           Login
         </Button>
       </form>
@@ -69,6 +69,7 @@ function LogIn() {
       <Link to="/signup" className="text-blue-500">
         Sign Up
       </Link>
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
   );
 }

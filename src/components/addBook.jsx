@@ -76,7 +76,7 @@ function AddBook() {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center items-center min-h-screen my-40">
             <div className="card w-96 bg-base-100 shadow-xl">
                 <div className="card-body">
                     <h2 className="card-title">Add Book</h2>
@@ -177,6 +177,7 @@ function AddBook() {
                     </form>
                 </div>
             </div>
+            <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
         </div>
     );
 }

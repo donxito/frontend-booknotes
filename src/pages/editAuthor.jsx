@@ -58,8 +58,8 @@ function EditAuthor() {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="flex justify-center items-center min-h-screen my-40">
+          <div className="card w-96 bg-base-100 shadow-xl my-8">
             <div className="card-body">
               <h2 className="card-title">Edit Author</h2>
               <form onSubmit={handleFormSubmit}>
@@ -93,6 +93,7 @@ function EditAuthor() {
               </form>
             </div>
           </div>
+          <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
         </div>
       );
     }

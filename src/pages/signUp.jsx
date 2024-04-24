@@ -48,8 +48,8 @@ function SignUp() {
   };
 
   return (
-    <div className="SignUpPage p-6 bg-white shadow-md rounded-md max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-7">Sign Up</h1>
+    <div className="SignUpPage p-6 bg-white shadow-md rounded-md max-w-md mx-auto my-40">
+      <h2 className="text-2xl font-bold mb-7">Sign Up</h2>
 
       <form onSubmit={handleFormSubmit}>
         <div className="flex items-center mb-4">
@@ -103,13 +103,14 @@ function SignUp() {
           </Button>
           {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
-        <div className="mb-2">
+        <div className="mb-2 my-8">
           <p>Already have an account?</p>
         </div>
         <Link to="/login" className="btn btn-active btn-secondary">
           Login
         </Link>
       </form>
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
   );
 }

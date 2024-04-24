@@ -31,7 +31,7 @@ function NotesCard({ bookId }) {
     
 
     return (
-        <div className="p-6 border-2 border-gray-300 rounded-md shadow-md bg-white max-w-xl mx-auto">
+        <div className="p-6 border-2 border-gray-300 rounded-md shadow-md bg-white max-w-xl mx-auto my-8">
             <h2 className="text-2xl font-bold mb-2">Notes:</h2>
            
             <ul>

@@ -32,8 +32,8 @@ function AuthorList() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-3xl font-bold underline my-4">Authors</h2>
+    <div className="flex flex-col items-center my-40">
+      <h2 className="text-3xl font-bold underline my-8">Authors</h2>
 
       {loading ? (
         <li>Loading...</li>
@@ -48,7 +48,9 @@ function AuthorList() {
       ) : (
         <p>No authors found</p>
       )}
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
+    
   );
 }
 

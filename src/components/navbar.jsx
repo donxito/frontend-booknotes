@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo-white.png";
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -22,11 +22,11 @@ function Navbar() {
   };
 
   return (
-    <div className="navbar bg-neutral text-neutral-content" >
+    <div className="navbar bg-neutral text-neutral-content" style={{ position: 'fixed', top: 0, width: '100%', zIndex: 1000 }} >
       {/* Home Button */}
       <div className="flex items-center">
         <Link to="/">
-          <img src={logo} alt="logo" className="w-14 h-14 mr-8 ml-6 opacity-70" />
+          <img src={logo} alt="logo" className="w-12 h-12 mr-8 ml-6 opacity-70" />
         </Link>
       </div>
 

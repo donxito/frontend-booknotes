@@ -11,7 +11,7 @@ function HomePage() {
   return (
     <div className="hero min-h-screen" style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover'}}>
     
-    <div className="hero-overlay bg-opacity-70"></div>
+    <div className="hero-overlay bg-opacity-60"></div>
     <div className="hero-content text-left text-neutral-content mb-20">
     
         <div className="max-w-md">
@@ -37,6 +37,7 @@ function HomePage() {
           )}
         </div>
       </div>
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
   );
 }

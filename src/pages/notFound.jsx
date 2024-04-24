@@ -106,6 +106,7 @@ function NotFound() {
               </Link>
         </div>
       </div>
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
   );
 }

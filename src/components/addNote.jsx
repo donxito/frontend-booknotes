@@ -38,10 +38,10 @@ function AddNote({ bookId, onNoteAdded }) {
   };
 
   return (
-    <form onSubmit={handleAddNote} className="space-y-4 mb-20">
+    <form onSubmit={handleAddNote} className="space-y-4 mb-20 my-4">
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Add a note:</span>
+          <span className="label-text my-4 font-bold">Add a note:</span>
         </label>
         <Textarea
           style={{ minHeight: "200px" }} 

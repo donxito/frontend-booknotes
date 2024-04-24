@@ -31,7 +31,7 @@ function AddAuthor() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen my-40">
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">Add Author</h2>
@@ -66,6 +66,7 @@ function AddAuthor() {
           </form>
         </div>
       </div>
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
   );
 }

@@ -77,25 +77,27 @@ function BookDetails() {
   console.log("rendering notes", notes);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center my-40">
       <Box p={4}>
-        <h2 className="text-3xl font-bold underline my-4 text-center">
+        <h2 className="text-3xl font-bold underline my-8 text-center">
           Book Details
         </h2>
         {loading ? (
           <Center>Loading...</Center>
         ) : book ? (
           <>
-            <Box w="full">
+            <Box w="full" my={4}>
               <BookCard book={book} />
             </Box>
-            <Divider my={4} />
+
+            <Divider my={40} />
+
             <Box>
               <Heading
                 size="md"
                 mb={3}
                 p={6}
-                m={6}
+                m={10}
                 style={{
                   fontSize: "1.5rem",
                   textAlign: "center",
@@ -115,7 +117,7 @@ function BookDetails() {
                     <Box
                       key={note._id}
                       p={4} // Padding
-                      m={4} // Margin to create space between cards
+                      m={8} // Margin to create space between cards
                       boxShadow="lg"
                       borderRadius="lg"
                       borderWidth="1px"
@@ -178,6 +180,7 @@ function BookDetails() {
           <Center>Book not found</Center>
         )}
       </Box>
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
   );
 }

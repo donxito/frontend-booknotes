@@ -5,7 +5,9 @@ function Footer() {
   const date = new Date().getFullYear();
 
   return (
-    <footer className="footer p-2 bg-neutral text-neutral-content flex justify-center items-center" style={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 1000, marginTop: '50px' }}>
+    
+    <footer className="footer p-2 bg-neutral text-neutral-content flex justify-center items-center" style={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 1000, marginTop: '600px' }}>
+    
       <p className="mr-4">
        
         <Link
@@ -38,6 +40,9 @@ function Footer() {
         </Link>
 
       </div>
+
+      
+  
     </footer>
   );
 }

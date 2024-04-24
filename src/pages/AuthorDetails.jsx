@@ -25,9 +25,9 @@ function AuthorDetails() {
   }, [authorId]);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center my-40">
       <Box p={4}>
-        <h2 className="text-3xl font-bold underline my-4 text-center">
+        <h2 className="text-3xl font-bold underline my-8 text-center">
           Author Details
         </h2>
 
@@ -50,6 +50,7 @@ function AuthorDetails() {
           </Box>
         )}
       </Box>
+      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
     </div>
   );
 }
