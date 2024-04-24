@@ -67,7 +67,7 @@ function BookCard({ book }) {
             {book.year}
           </p>
           <p className="text-sm mb-2">
-            <strong>Description: </strong>
+            <strong>Review: </strong>
             {book.description}
           </p>
           <p className="text-sm mb-2">

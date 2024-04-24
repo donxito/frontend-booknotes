@@ -159,11 +159,11 @@ function AddBook() {
                         </div>
                         <div className="form-control">
                             <label className="label">
-                                <span className="label-text">Description</span>
+                                <span className="label-text">Review</span>
                             </label>
                             <textarea
                                 type="text"
-                                placeholder="Describe this book"
+                                placeholder="Review this book"
                                 className="input input-bordered"
                                 value={description}
                                 onChange={(event) => setDescription(event.target.value)}
