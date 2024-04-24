@@ -15,7 +15,7 @@ function HomePage() {
     <div className="hero-content text-left text-neutral-content mb-20">
     
         <div className="max-w-md">
-        <h1 className="text-9xl font-bold text-amber-100" >Mini Book Club</h1>
+        <h1 className="text-9xl font-bold text-amber-100 my-20" >Mini Book Club</h1>
         <p className="py-7 text-2xl font-bold text-amber-100">A simple note taking app, where you can post your thoughts about any book</p>
     
             <Link to={"/books"}>
