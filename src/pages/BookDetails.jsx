@@ -83,7 +83,9 @@ function BookDetails() {
           <Center>Loading...</Center>
         ) : book ? (
           <>
+          <Box w="full">
           <BookCard book={book} />
+          </Box>
             <Divider my={4} />
             <Box>
               <Heading

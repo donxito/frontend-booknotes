@@ -12,7 +12,7 @@ function HomePage() {
     <div className="hero min-h-screen" style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover'}}>
     
     <div className="hero-overlay bg-opacity-70"></div>
-    <div className="hero-content text-left text-neutral-content">
+    <div className="hero-content text-left text-neutral-content mb-20">
     
         <div className="max-w-md">
         <h1 className="text-9xl font-bold text-amber-100" >Mini Book Club</h1>

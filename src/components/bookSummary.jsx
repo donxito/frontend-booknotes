@@ -34,7 +34,7 @@ function BookSummary({ book }) {
           <img
             src={book.coverURL}
             alt={book.title}
-            className="h-48 w-full object-cover md:h-full md:w-48"
+            className="h-64 w-full object-cover md:h-full md:w-48"
           />
         </figure>
         <div className="card-body">

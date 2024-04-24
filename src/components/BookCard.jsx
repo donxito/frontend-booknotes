@@ -45,18 +45,18 @@ function BookCard({ book }) {
   console.table("the user", user);
 
   return (
-    <div className="card card-side bg-base-200 border border-gray-300 shadow-md rounded-md max-w-md mx-auto">
+    <div className="card card-side bg-base-200 border border-gray-300 shadow-md rounded-md max-w-4xl mx-auto" style={{ borderRadius: "20px" }}>
       <div className="md:flex">
         {/* Image Container */}
         <figure className="md:w-1/2">
           <img
             src={book.coverURL}
             alt={book.title}
-            className="h-48 w-full object-cover md:h-full md:w-full"
+            className="h-96 w-full object-cover md:h-full md:w-full"
           />
         </figure>
         {/* Text Content */}
-        <div className="card-body">
+        <div className="card-body w-full md:w-1/2 p-6">
           <h2 className="card-title text-2xl my-2">{book.title}</h2>
           <p className="text-sm mb-2">
             <strong>Genre: </strong>
@@ -104,19 +104,6 @@ function BookCard({ book }) {
             </Button>
           </div>
 
-          {/* Button to go back */}
-          <div className="card-actions justify-start my-4">
-            <Button
-              px={6}
-              py={3}
-              fontWeight="bold"
-              className="btn btn-secondary"
-              onClick={() => navigate(`/books`)}
-            >
-              Back
-            </Button>
-          </div>
-
           {/* Button to edit the book */}
           {isBookOwner && (
             <div className="card-actions justify-end my-4">
@@ -142,6 +129,19 @@ function BookCard({ book }) {
               </Button>
             </div>
           )}
+
+          {/* Button to go back */}
+          <div className="card-actions justify-start my-4">
+            <Button
+              px={6}
+              py={3}
+              fontWeight="bold"
+              className="btn btn-secondary"
+              onClick={() => navigate(`/books`)}
+            >
+              Back
+            </Button>
+          </div>
         </div>
       </div>
     </div>

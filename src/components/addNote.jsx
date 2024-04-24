@@ -38,7 +38,7 @@ function AddNote({ bookId, onNoteAdded }) {
   };
 
   return (
-    <form onSubmit={handleAddNote} className="space-y-4">
+    <form onSubmit={handleAddNote} className="space-y-4 mb-20">
       <div className="form-control">
         <label className="label">
           <span className="label-text">Add a note:</span>

@@ -20,6 +20,8 @@ function AddAuthor() {
       .createAuthor(newAuthor)
       .then((response) => {
         console.log(response);
+        // Reload the page after successfully adding the author
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);

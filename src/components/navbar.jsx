@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo-white.png";
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -22,11 +22,11 @@ function Navbar() {
   };
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-neutral text-neutral-content" >
       {/* Home Button */}
       <div className="flex items-center">
         <Link to="/">
-          <img src={logo} alt="logo" className="w-14 h-14 mr-8 ml-6" />
+          <img src={logo} alt="logo" className="w-14 h-14 mr-8 ml-6 opacity-70" />
         </Link>
       </div>
 
@@ -80,14 +80,14 @@ function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="btn btn-ghost"
+                  className="btn btn-ghost text-neutral"
                   onClick={handleDropdownLinkClick}
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
-                  className="btn btn-ghost"
+                  className="btn btn-ghost text-neutral"
                   onClick={handleDropdownLinkClick}
                 >
                   Sign Up
@@ -96,14 +96,14 @@ function Navbar() {
             )}
             <Link
               to="/books"
-              className="btn btn-ghost"
+              className="btn btn-ghost text-neutral"
               onClick={handleDropdownLinkClick}
             >
               Books
             </Link>
             <Link
               to="/authors"
-              className="btn btn-ghost"
+              className="btn btn-ghost text-neutral"
               onClick={handleDropdownLinkClick}
             >
               Authors
@@ -112,26 +112,26 @@ function Navbar() {
               <>
                 <Link
                   to="/books/add"
-                  className="btn btn-ghost"
+                  className="btn btn-ghost text-neutral"
                   onClick={handleDropdownLinkClick}
                 >
                   Add Book
                 </Link>
                 <Link
                   to="/authors/add"
-                  className="btn btn-ghost"
+                  className="btn btn-ghost text-neutral"
                   onClick={handleDropdownLinkClick}
                 >
                   Add Author
                 </Link>
                 <Link
                   to="/profile"
-                  className="btn btn-ghost"
+                  className="btn btn-ghost text-neutral"
                   onClick={handleDropdownLinkClick}
                 >
                   Profile
                 </Link>
-                <button className="btn btn-ghost" onClick={handleLogout}>
+                <button className="btn btn-ghost text-neutral" onClick={handleLogout}>
                   Logout
                 </button>
               </>
