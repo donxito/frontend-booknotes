@@ -7,7 +7,7 @@ This is the Mini Book Club Frontend (React App) repo.
 
 ## Description
 
-this project is a gift for my wife and her book reading club. My Mini Book Club is a place where you can share notes of your favourite books and also ratings. It allows logged-in users to manage all the books, authors and notes that they own in the database doing full CRUD. Anonymous users can see the books, authors and notes.
+This project is a gift for my wife and her book reading club. My Mini Book Club is a place where you can share notes of your favourite books and also ratings. It allows logged-in users to manage all the books, authors and notes that they own in the database doing full CRUD. Anonymous users can see the books, authors and notes.
 
 Mini Book Club is a Full-stack application using the MERN stack (MongoDB, Express, React, and Node.JS)
 This repository contains the backend code for the server of this application. It is a RESTful API built with ExpressJS, MongoDB, and Mongoose.
@@ -89,6 +89,9 @@ Add the following environment variables in `.env` files:
 - `VITE_API_URL=<your-adaptable-app-domain>`
 
 ## Screenshots
+
+<img width="2051" alt="Screenshot 2024-04-24 at 17 57 24" src="https://github.com/donxito/frontend-booknotes/assets/96595540/029680eb-c547-4af4-9137-498763d1b7e7">
+
 
 
 
