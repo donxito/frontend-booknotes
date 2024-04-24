@@ -46,7 +46,7 @@ function AuthorList() {
           ))}
         </div>
       ) : (
-        <li>No authors found</li>
+        <p>No authors found</p>
       )}
     </div>
   );
