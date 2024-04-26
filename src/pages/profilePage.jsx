@@ -48,13 +48,25 @@ function ProfilePage() {
         return <div>Loading...</div>
     }
 
+    // date & greeting
+
+    let greeting = "";
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+        greeting = "Good morning";
+    } else if (currentHour < 18) {
+        greeting = "Good afternoon";
+    } else {
+        greeting = "Good evening";
+    }
+
 
 
   return (
     <div className="ProfilePage my-40 flex justify-center items-center">
     <div className="flex">
     <section className="profile p-6 bg-white shadow-md rounded-md max-w-md mx-auto mr-4 ">
-    <h2 className="text-2xl font-bold mb-4">Welcome, {user.name}!</h2>
+    <h2 className="text-2xl font-bold mb-4">{greeting} {user.name}!</h2>
     <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Email:</h2>
         <p>{user.email}</p>
