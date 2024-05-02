@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import booksService from "../services/book.service";
 import BookSummary from "../components/bookSummary";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 function BookList() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     // fetch the books from the server using the booksService
@@ -29,7 +31,7 @@ function BookList() {
       <h2 className="text-3xl font-bold underline my-8">Books</h2>
 
       {loading ? (
-        <p>Loading...</p>
+        <PacmanLoader show={loader} heightUnit={150} />
       ) : books && Array.isArray(books) ? (
         <div className="flex flex-wrap justify-center ">
           {books.map((book) => (

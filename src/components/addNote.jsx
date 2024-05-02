@@ -1,11 +1,15 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { Button, Textarea, useToast } from "@chakra-ui/react";
+import { Textarea, useToast } from "@chakra-ui/react";
 import notesService from "../services/notes.service";
+import AddIcon from "@mui/icons-material/Add";
+import Fab from "@mui/material/Fab";
+import Zoom from "@mui/material/Zoom";
 
 function AddNote({ bookId, onNoteAdded }) {
   const [content, setContent] = useState("");
   const toast = useToast();
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const handleAddNote = async () => {
     try {
@@ -37,31 +41,32 @@ function AddNote({ bookId, onNoteAdded }) {
     }
   };
 
+  const handleClick = () => {
+    setIsExpanded(true)
+  }
+
   return (
-    <form onSubmit={handleAddNote} className="space-y-4 mb-20 my-4">
+    <form  className="space-y-4 mb-20 my-4">
       <div className="form-control">
         <label className="label">
           <span className="label-text my-4 font-bold">Add a note:</span>
         </label>
         <Textarea
-          style={{ minHeight: "200px" }} 
+          style={isExpanded ? { minHeight: "200px" } : { minHeight: "50px" }} 
           type="text"
           placeholder="Add your notes"
           className="input input-bordered"
           value={content}
+          onClick={handleClick}
           onChange={(event) => setContent(event.target.value)}
         />
       </div>
 
-      <Button
-        type="submit"
-        px={6}
-        py={3}
-        fontWeight="bold"
-        className="btn btn-primary"
-      >
-        Add Note
-      </Button>
+      <Zoom in={isExpanded}>
+            <Fab onClick={handleAddNote}>
+              <AddIcon />
+            </Fab>
+          </Zoom>
     </form>
   );
 }

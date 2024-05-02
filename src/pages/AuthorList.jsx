@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import authorService from "../services/author.service";
 import AuthorCard from "../components/authorCard";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 function AuthorList() {
   const [authors, setAuthors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     const fetchAuthors = async () => {
@@ -36,7 +39,7 @@ function AuthorList() {
       <h2 className="text-3xl font-bold underline my-8">Authors</h2>
 
       {loading ? (
-        <li>Loading...</li>
+        <PacmanLoader show={loader} heightUnit={150} />
       ) : authors && Array.isArray(authors) && authors.length ? (
         <div className="flex flex-wrap justify-center ">
           {authors.map((author) => (
