@@ -3,13 +3,14 @@ import { useState } from "react";
 import { Textarea, useToast } from "@chakra-ui/react";
 import notesService from "../services/notes.service";
 import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
 import Zoom from "@mui/material/Zoom";
+
 
 function AddNote({ bookId, onNoteAdded }) {
   const [content, setContent] = useState("");
   const toast = useToast();
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isHovered, setIsHovered] = useState(false); 
 
   const handleAddNote = async () => {
     try {
@@ -45,6 +46,14 @@ function AddNote({ bookId, onNoteAdded }) {
     setIsExpanded(true)
   }
 
+  const handleMouseOver = () => {
+    setIsHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false); 
+  }
+
   return (
     <form  className="space-y-4 mb-20 my-4">
       <div className="form-control">
@@ -63,9 +72,17 @@ function AddNote({ bookId, onNoteAdded }) {
       </div>
 
       <Zoom in={isExpanded}>
-            <Fab onClick={handleAddNote}>
-              <AddIcon />
-            </Fab>
+
+      <AddIcon
+          onClick={handleAddNote}
+          onMouseOver={handleMouseOver}
+          onMouseLeave={handleMouseLeave} 
+          style={{
+            background: isHovered ? "#291E00" : "gray", 
+            borderRadius: "50px",
+            color: "white",
+          }}
+        />
           </Zoom>
     </form>
   );
