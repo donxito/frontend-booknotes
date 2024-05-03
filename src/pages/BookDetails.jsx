@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
@@ -6,6 +7,7 @@ import AddNote from "../components/addNote";
 import notesService from "../services/notes.service";
 import userService from "../services/user.service";
 import { AuthContext } from "../context/auth.context";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 import BookCard from "../components/BookCard"
 
@@ -21,6 +23,7 @@ function BookDetails() {
   const [book, setBook] = useState(null);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(false);
 
   // fetch the book and notes from the server using the booksService
   useEffect(() => {
@@ -83,7 +86,7 @@ function BookDetails() {
           Book Details
         </h2>
         {loading ? (
-          <Center>Loading...</Center>
+          <PacmanLoader show={loader} heightUnit={150} />
         ) : book ? (
           <>
             <Box w="full" my={4}>

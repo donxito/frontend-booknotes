@@ -1,14 +1,17 @@
+/* eslint-disable no-unused-vars */
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import authorsService from "../services/author.service";
 import AuthorCard from "../components/authorCard";
 import { Box, Text, Heading } from "@chakra-ui/react";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 function AuthorDetails() {
   const { authorId } = useParams();
 
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     const fetchAuthor = async () => {
@@ -32,7 +35,7 @@ function AuthorDetails() {
         </h2>
 
         {loading ? (
-          <Text>Loading...</Text>
+          <PacmanLoader show={loader} heightUnit={150} />
         ) : (
           <Box>
             <Heading
