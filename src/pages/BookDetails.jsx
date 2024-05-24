@@ -9,9 +9,7 @@ import userService from "../services/user.service";
 import { AuthContext } from "../context/auth.context";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
-import BookCard from "../components/BookCard"
-
-
+import BookCard from "../components/BookCard";
 
 import { Box, Text, Heading, Divider, Center, Grid } from "@chakra-ui/react";
 
@@ -119,14 +117,14 @@ function BookDetails() {
                   notes.map((note) => (
                     <Box
                       key={note._id}
-                      p={4} // Padding
-                      m={8} // Margin to create space between cards
+                      p={4} 
+                      m={8} 
                       boxShadow="lg"
                       borderRadius="lg"
                       borderWidth="1px"
                       borderColor="gray.300"
                       backgroundColor="gray.200"
-                      style={{ maxHeight: "300px", overflowY: "auto" }} // Set maximum height and enable overflow handling
+                      style={{ maxHeight: "300px", overflowY: "auto" }} 
                     >
                       <Text
                         style={{
@@ -183,7 +181,8 @@ function BookDetails() {
           <Center>Book not found</Center>
         )}
       </Box>
-      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
+      <div className="spacer" style={{ height: "500px" }}></div>{" "}
+      {/* Placeholder element */}
     </div>
   );
 }

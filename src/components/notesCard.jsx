@@ -3,8 +3,6 @@ import notesService from "../services/notes.service";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-
-
 function NotesCard({ bookId }) {
     const [notes, setNotes] = useState([]); 
     const [loading, setLoading] = useState(true);
@@ -28,7 +26,6 @@ function NotesCard({ bookId }) {
         
         fetchNotes();
     }, [bookId]);
-    
 
     return (
         <div className="p-6 border-2 border-gray-300 rounded-md shadow-md bg-white max-w-xl mx-auto my-8">
@@ -47,7 +44,6 @@ function NotesCard({ bookId }) {
                     ))
                 )}
             </ul>
-          
         </div>
     );
 }
