@@ -8,7 +8,6 @@ import { AuthContext } from "../context/auth.context";
 import { Box, Text, Heading, Button } from "@chakra-ui/react";
 
 function AuthorCard({ author, onDelete }) {
-
   const { authorId } = useParams();
 
   const [books, setBooks] = useState([]);
@@ -57,20 +56,28 @@ function AuthorCard({ author, onDelete }) {
           boxShadow="md"
           p="30"
         >
-          <Heading style={{ fontSize: "1.6rem", fontFamily: "Proza Libre" }}>
+          <Heading
+            style={{
+              fontSize: "1.6rem",
+              fontFamily: "Proza Libre",
+              paddingBottom: "10px",
+            }}
+          >
             {author.name}
           </Heading>
           <Text fontSize="lg" mb="4">
             <strong>Bio: </strong> {author.bio}
           </Text>
           <Box>
-            <strong>Books: </strong>
+            <Text fontSize="lg" mb="4">
+              <strong>Books: </strong>
+            </Text>
             <ul>
               {books.map((book) => (
                 <li key={book._id}>
                   <Link
                     to={`/books/${book._id}`}
-                    className="text-secondary text-lg underline"
+                    className="text-secondary text-lg underline pb-5"
                   >
                     {book.title}
                   </Link>
@@ -81,32 +88,32 @@ function AuthorCard({ author, onDelete }) {
 
           {/* Button to edit the author */}
           {isLoggedIn && (
-          <div className="card-actions justify-end my-6">
-            <Button
-              px={6}
-              py={3}
-              fontWeight="bold"
-              className="btn btn-primary"
-              onClick={() => navigate(`/authors/${author._id}/edit`)}
-            >
-              Edit
-            </Button>
+            <div className="card-actions justify-end my-6">
+              <Button
+                px={6}
+                py={3}
+                fontWeight="bold"
+                className="btn btn-primary"
+                onClick={() => navigate(`/authors/${author._id}/edit`)}
+              >
+                Edit
+              </Button>
 
-            {/* Button to delete the author */}
-            <Button
-              px={6}
-              py={3}
-              fontWeight="bold"
-              className="btn btn-primary"
-              onClick={() => handleDeleteAuthor(author._id)}
-            >
-              Delete
-            </Button>
-          </div>
+              {/* Button to delete the author */}
+              <Button
+                px={6}
+                py={3}
+                fontWeight="bold"
+                className="btn btn-primary"
+                onClick={() => handleDeleteAuthor(author._id)}
+              >
+                Delete
+              </Button>
+            </div>
           )}
 
-            {/* Button to go back */}
-            <div className="card-actions justify-end my-4">
+          {/* Button to go back */}
+          <div className="card-actions justify-end my-4">
             <Button
               px={6}
               py={3}
@@ -117,9 +124,6 @@ function AuthorCard({ author, onDelete }) {
               Back
             </Button>
           </div>
-
-
-
         </Box>
       </div>
     </div>
