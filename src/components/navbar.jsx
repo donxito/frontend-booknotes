@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import {  useContext } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import {
   Box,
@@ -15,6 +15,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
   VStack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
@@ -26,6 +27,7 @@ const MotionBox = motion(Box);
 function Navbar() {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const handleLogout = () => {
     logOutUser();
@@ -43,95 +45,95 @@ function Navbar() {
 
         <Spacer />
 
-        <Box display={{ base: "none", md: "block" }}>
+        {!isMobile ? (
           <Flex alignItems="center">
             {!isLoggedIn && (
               <>
-              <Button as={Link} to="/login" colorScheme="teal" variant="ghost" mr={3} leftIcon={<FaSignInAlt />}>
+                <Button as={Link} to="/login" colorScheme="teal" variant="ghost" mr={2} leftIcon={<FaSignInAlt />} fontSize="sm">
                   Login
                 </Button>
-                <Button as={Link} to="/signup" colorScheme="teal" variant="ghost" mr={3} leftIcon={<FaUserPlus />}>
+                <Button as={Link} to="/signup" colorScheme="teal" variant="ghost" mr={2} leftIcon={<FaUserPlus />} fontSize="sm">
                   Sign Up
                 </Button>
               </>
             )}
-            <Button as={Link} to="/books" colorScheme="teal" variant="ghost" mr={3} leftIcon={<FaBook />}>
+            <Button as={Link} to="/books" colorScheme="teal" variant="ghost" mr={2} leftIcon={<FaBook />} fontSize="sm">
               Books
             </Button>
-            <Button as={Link} to="/authors" colorScheme="teal" variant="ghost" mr={3} leftIcon={<FaUser />}>
+            <Button as={Link} to="/authors" colorScheme="teal" variant="ghost" mr={2} leftIcon={<FaUser />} fontSize="sm">
               Authors
             </Button>
             {isLoggedIn && (
               <>
-                <Button as={Link} to="/books/add" colorScheme="teal" variant="ghost" mr={3}>
+                <Button as={Link} to="/books/add" colorScheme="teal" variant="ghost" mr={2} fontSize="sm">
                   Add Book
                 </Button>
-                <Button as={Link} to="/authors/add" colorScheme="teal" variant="ghost" mr={3}>
+                <Button as={Link} to="/authors/add" colorScheme="teal" variant="ghost" mr={2} fontSize="sm">
                   Add Author
                 </Button>
-                <Button as={Link} to="/profile" colorScheme="teal" variant="ghost" mr={3} leftIcon={<FaUser />}>
+                <Button as={Link} to="/profile" colorScheme="teal" variant="ghost" mr={2} leftIcon={<FaUser />} fontSize="sm">
                   Profile
                 </Button>
-                <Button onClick={logOutUser} colorScheme="teal" variant="ghost" leftIcon={<FaSignOutAlt />}>
+                <Button onClick={logOutUser} colorScheme="teal" variant="ghost" leftIcon={<FaSignOutAlt />} fontSize="sm">
                   Logout
                 </Button>
               </>
             )}
           </Flex>
-        </Box>
-
-        <Box display={{ base: "block", md: "none" }}>
+        ) : (
           <IconButton
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
             onClick={onOpen}
             variant="outline"
             aria-label="Open Menu"
+            color="white"
           />
-          <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader>Menu</DrawerHeader>
-              <DrawerBody>
-                <VStack spacing={4} align="stretch">
-                  {!isLoggedIn && (
-                    <>
-                      <Button as={Link} to="/login" onClick={onClose} w="100%">
-                        Login
-                      </Button>
-                      <Button as={Link} to="/signup" onClick={onClose} w="100%">
-                        Sign Up
-                      </Button>
-                    </>
-                  )}
-                  <Button as={Link} to="/books" onClick={onClose} w="100%">
-                    Books
-                  </Button>
-                  <Button as={Link} to="/authors" onClick={onClose} w="100%">
-                    Authors
-                  </Button>
-                  {isLoggedIn && (
-                    <>
-                      <Button as={Link} to="/books/add" onClick={onClose} w="100%">
-                        Add Book
-                      </Button>
-                      <Button as={Link} to="/authors/add" onClick={onClose} w="100%">
-                        Add Author
-                      </Button>
-                      <Button as={Link} to="/profile" onClick={onClose} w="100%">
-                        Profile
-                      </Button>
-                      <Button onClick={handleLogout} w="100%">
-                        Logout
-                      </Button>
-                    </>
-                  )}
-                </VStack>
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
-        </Box>
+        )}
       </Flex>
+
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Menu</DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4} align="stretch">
+              {!isLoggedIn && (
+                <>
+                  <Button as={Link} to="/login" onClick={onClose} w="100%" leftIcon={<FaSignInAlt />}>
+                    Login
+                  </Button>
+                  <Button as={Link} to="/signup" onClick={onClose} w="100%" leftIcon={<FaUserPlus />}>
+                    Sign Up
+                  </Button>
+                </>
+              )}
+              <Button as={Link} to="/books" onClick={onClose} w="100%" leftIcon={<FaBook />}>
+                Books
+              </Button>
+              <Button as={Link} to="/authors" onClick={onClose} w="100%" leftIcon={<FaUser />}>
+                Authors
+              </Button>
+              {isLoggedIn && (
+                <>
+                  <Button as={Link} to="/books/add" onClick={onClose} w="100%">
+                    Add Book
+                  </Button>
+                  <Button as={Link} to="/authors/add" onClick={onClose} w="100%">
+                    Add Author
+                  </Button>
+                  <Button as={Link} to="/profile" onClick={onClose} w="100%" leftIcon={<FaUser />}>
+                    Profile
+                  </Button>
+                  <Button onClick={handleLogout} w="100%" leftIcon={<FaSignOutAlt />}>
+                    Logout
+                  </Button>
+                </>
+              )}
+            </VStack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </Box>
   );
 }

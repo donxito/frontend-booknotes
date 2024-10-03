@@ -1,89 +1,62 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
-import notesService from "../services/notes.service";
 import {
   Box,
-  Heading,
   Text,
   VStack,
   Spinner,
-  Container,
+  Center,
+  HStack,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const MotionBox = motion(Box);
 
-function NotesCard({ bookId }) {
-  const [notes, setNotes] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchNotes = async () => {
-      if (!bookId) {
-        return;
-      }
-
-      try {
-        const response = await notesService.getNotesByBookId(bookId);
-        setNotes(response.data);
-      } catch (error) {
-        console.log("Error fetching notes:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNotes();
-  }, [bookId]);
+function NotesCard({ notes }) {
+  if (!notes) {
+    return (
+      <Center py={8}>
+        <Spinner size="lg" thickness="4px" speed="0.65s" color="teal.500" />
+      </Center>
+    );
+  }
 
   return (
-    <Container maxW="container.md" py={8}>
-      <MotionBox
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Box bg="white" p={6} borderRadius="lg" boxShadow="md">
-          <Heading as="h2" size="xl" mb={4}>
-            Notes
-          </Heading>
-          {loading ? (
-            <Spinner size="xl" />
-          ) : (
-            <AnimatePresence>
-              <VStack spacing={4} align="stretch">
-                {notes.map((note) => (
-                  <MotionBox
-                    key={note._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Box
-                      p={4}
-                      borderWidth="1px"
-                      borderRadius="md"
-                      boxShadow="sm"
-                    >
-                      <Text fontSize="md" mb={2}>
-                        {note.content}
-                      </Text>
-                      <Text fontSize="sm" color="gray.500">
-                        Book: {note.bookId?.title || "Unknown"}
-                      </Text>
-                      <Text fontSize="sm" color="gray.500">
-                        By: {note.reader ? note.reader.name : "Unknown"}
-                      </Text>
-                    </Box>
-                  </MotionBox>
-                ))}
-              </VStack>
-            </AnimatePresence>
-          )}
-        </Box>
-      </MotionBox>
-    </Container>
+    <VStack spacing={4} align="stretch" width="100%">
+      <AnimatePresence>
+        {notes.length === 0 ? (
+          <Text fontSize="lg" color="gray.500" textAlign="center">
+            No notes available for this book.
+          </Text>
+        ) : (
+          notes.map((note) => (
+            <MotionBox
+              key={note._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              p={6}
+              borderWidth={1}
+              borderRadius="lg"
+              boxShadow="md"
+              bg="white"
+            >
+              <Text fontSize="md" color="gray.700" mb={3}>
+                {note.content}
+              </Text>
+              <HStack justifyContent="space-between" alignItems="center">
+                <Text fontSize="sm" color="gray.500">
+                  By: {note.user && note.user.name ? note.user.name : "Anonymous"}
+                </Text>
+                <Text fontSize="sm" color="gray.500">
+                  {new Date(note.createdAt).toLocaleDateString()}
+                </Text>
+              </HStack>
+            </MotionBox>
+          ))
+        )}
+      </AnimatePresence>
+    </VStack>
   );
 }
 

@@ -18,13 +18,14 @@ import NotesCard from "./components/notesCard";
 import NotFound from "./pages/notFound";
 import Footer from "./components/footer";
 
+
 function App() {
   return (
     <ChakraProvider>
       <CSSReset />
-      <Box minHeight="100vh" display="flex" flexDirection="column">
+      <Box minHeight="100vh" display="flex" flexDirection="column" bg="gray.100">
         <Navbar />
-        <Box flex="1">
+        <Box flex="1" mt="64px" mb="48px">
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<HomePage />} />

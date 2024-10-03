@@ -32,6 +32,11 @@ class BooksService {
         return this.api.get(`/books/${bookId}`);
     };
 
+    // GET /books/:bookId/notes
+    getNotesByBookId = (bookId) => {
+        return this.api.get(`/books/${bookId}/notes`);
+    };
+
     // PUT /books/:bookId
     updateBook = (bookId, requestBody) => {
         return this.api.put(`/books/${bookId}`, requestBody);
