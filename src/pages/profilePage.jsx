@@ -1,108 +1,124 @@
-/* eslint-disable no-unused-vars */
-import {useContext, useState} from 'react'
-import { AuthContext } from '../context/auth.context'
-import { Button } from "react-daisyui";
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+/* eslint-disable react/no-unescaped-entities */
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/auth.context";
+import booksService from "../services/book.service";
+import BookSummary from "../components/bookSummary";
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  VStack,
+  SimpleGrid,
+  Container,
+  useToast,
+} from "@chakra-ui/react";
+import { motion } from "framer-motion";
 
-import booksService from '../services/book.service';
-import notesService from '../services/notes.service';
-
-import BookSummary from '../components/bookSummary';
+const MotionBox = motion(Box);
 
 function ProfilePage() {
+  const { user, logOutUser } = useContext(AuthContext);
+  const [books, setBooks] = useState([]);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const toast = useToast();
 
-    const { user, logOutUser } = useContext(AuthContext);
-
-    const [isLoggingOut, setIsloggingOut] = useState(false)
-    const [books, setBooks] = useState([]);
- 
-
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchBooks = async () => {
-            try {
-                const booksResponse = await booksService.getBooks();
-                const userBooks = booksResponse.data.filter(book => book.reader?._id === user._id);
-                setBooks(userBooks);
-            } catch (error) {
-                console.error("Error fetching books:", error);
-            }
-        };
-        if (user) {
-            fetchBooks();
-
-        }
-        
-    }, [user])    
-    
-    
-    
-    const handleLogOut = () => {
-        logOutUser();
-        navigate("/")
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const booksResponse = await booksService.getBooks();
+        const userBooks = booksResponse.data.filter(book => book.reader?._id === user._id);
+        setBooks(userBooks);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch your books",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     };
-
-    if (!user) {
-        return <div>Loading...</div>
+    if (user) {
+      fetchBooks();
     }
+  }, [user, toast]);
 
-    // date & greeting
+  const handleLogOut = () => {
+    setIsLoggingOut(true);
+    logOutUser();
+    setIsLoggingOut(false);
+  };
 
-    let greeting = "";
+  if (!user) {
+    return <Box textAlign="center">Loading...</Box>;
+  }
+
+  const greeting = (() => {
     const currentHour = new Date().getHours();
-    if (currentHour < 12) {
-        greeting = "Good morning";
-    } else if (currentHour < 18) {
-        greeting = "Good afternoon";
-    } else {
-        greeting = "Good evening";
-    }
-
-
+    if (currentHour < 12) return "Good morning";
+    if (currentHour < 18) return "Good afternoon";
+    return "Good evening";
+  })();
 
   return (
-    <div className="ProfilePage my-40 flex justify-center items-center">
-    <div className="flex">
-    <section className="profile p-6 bg-white shadow-md rounded-md max-w-md mx-auto mr-4 ">
-    <h2 className="text-2xl font-bold mb-4">{greeting} {user.name}!</h2>
-    <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Email:</h2>
-        <p>{user.email}</p>
-    </div>
+    <Container maxW="container.xl" py={20}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <VStack spacing={10} align="stretch">
+          <Box bg="white" p={8} borderRadius="lg" boxShadow="xl">
+            <Heading as="h2" size="xl" mb={6}>
+              {greeting}, {user.name}!
+            </Heading>
+            <VStack align="start" spacing={4}>
+              <Text fontSize="lg">
+                <strong>Email:</strong> {user.email}
+              </Text>
+              {user.username && (
+                <Text fontSize="lg">
+                  <strong>Username:</strong> {user.username}
+                </Text>
+              )}
+              <Button
+                colorScheme="red"
+                onClick={handleLogOut}
+                isLoading={isLoggingOut}
+                loadingText="Logging Out"
+              >
+                Logout
+              </Button>
+            </VStack>
+          </Box>
 
-    {user.username && (
-        <div className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">Username:</h2>
-            <p>{user.username}</p>
-        </div>
-    )}
-    
-    <Button
-        className="btn btn-active btn-primary"
-        onClick={handleLogOut}
-        disabled={isLoggingOut} 
-    >
-        {isLoggingOut ? "Logging Out..." : "Logout"}
-    </Button>
-    </section>
+          <Box>
+            <Heading as="h3" size="lg" mb={6}>
+              My Books:
+            </Heading>
+            {books.length > 0 ? (
+              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+                {books.map((book) => (
+                  <MotionBox
+                    key={book._id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <BookSummary book={book} />
+                  </MotionBox>
+                ))}
+              </SimpleGrid>
+            ) : (
+              <Text>You haven't added any books yet.</Text>
+            )}
+          </Box>
+        </VStack>
+      </MotionBox>
+    </Container>
+  );
+}
 
-        <section className="events p-6 bg-white shadow-md rounded-md  mx-auto mr-4 ">
-    <h2 className="text-lg font-semibold mb-2">My Books:</h2>
-    {books.length > 0 && (
-        <div className="user-books">  
-        {books.map((book) => (
-            <BookSummary key={book._id} book={book} /> 
-        ))}
-        </div>
-       
-     )}
-      </section>
-      </div>
-      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
-      </div>
-      
-)}
-
-export default ProfilePage
+export default ProfilePage;

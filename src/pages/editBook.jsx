@@ -1,138 +1,171 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
 import booksService from "../services/book.service";
-import authorsService from "../services/author.service";
+import {
+  Box,
+  Heading,
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  Button,
+  VStack,
+  useToast,
+  Container,
+  Spinner,
+} from "@chakra-ui/react";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 function EditBook() {
   const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
   const [description, setDescription] = useState("");
-  const [authorId, setAuthorId] = useState("");
-  const [authors, setAuthors] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
+  const [genre, setGenre] = useState("");
+  const [year, setYear] = useState("");
+  const [coverURL, setCoverURL] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const { bookId } = useParams();
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBook = async () => {
       try {
-        const [bookData, authorsData] = await Promise.all([
-          booksService.getBook(bookId),
-          authorsService.getAuthors(),
-        ]);
-        
-        // Extracting book details from response data
-        const { title, description, authorId } = bookData.data;
-        setTitle(title);
-        setDescription(description);
-        setAuthorId(authorId);
-        
-        // Setting authors data
-        setAuthors(authorsData.data);
+        const response = await booksService.getBook(bookId);
+        const book = response.data;
+        setTitle(book.title);
+        setAuthor(book.author.name);
+        setDescription(book.description);
+        setGenre(book.genre);
+        setYear(book.year);
+        setCoverURL(book.coverURL);
       } catch (error) {
-        setError(error.message);
+        console.error("Error fetching book:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch book details",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
-
-    fetchData();
-  }, [bookId]);
+    fetchBook();
+  }, [bookId, toast]);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    setIsSubmitting(true);
-
     try {
-      // Construct the form data
-      const formData = {
+      const updatedBook = {
         title,
+        author,
         description,
-        authorId
+        genre,
+        year,
+        coverURL,
       };
-      
-      // Send a request to update the book
-      await booksService.updateBook(bookId, formData);
-      
-      // Redirect to the book details page
+      await booksService.updateBook(bookId, updatedBook);
+      toast({
+        title: "Book updated",
+        description: "Your book has been successfully updated",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       navigate(`/books/${bookId}`);
     } catch (error) {
-      setError(error.message);
-      setIsSubmitting(false);
+      console.error("Error updating book:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update book",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Placeholder for loading state
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>; // Placeholder for error state
+  if (loading) {
+    return (
+      <Box textAlign="center" mt={20}>
+        <Spinner size="xl" />
+      </Box>
+    );
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen my-40">
-      <div className="card w-96 bg-base-100 shadow-xl my-8">
-        <div className="card-body">
-          <h2 className="card-title">Edit Book</h2>
+    <Container maxW="container.md" py={20}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box bg="white" p={8} borderRadius="lg" boxShadow="xl">
+          <Heading as="h2" size="xl" textAlign="center" mb={8}>
+            Edit Book
+          </Heading>
           <form onSubmit={handleFormSubmit}>
-            <div className="form-control">
-              <label htmlFor="title" className="label">
-                <span className="label-text">Title:</span>
-              </label>
-              <input
-                type="text"
-                id="title"
-                className="input input-bordered"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className="form-control">
-              <label htmlFor="description" className="label">
-                <span className="label-text">Description:</span>
-              </label>
-              <textarea
-                id="description"
-                className="textarea textarea-bordered"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></textarea>
-            </div>
-            <div className="form-control">
-              <label htmlFor="authorId" className="label">
-                <span className="label-text">Author:</span>
-              </label>
-              <select
-                id="authorId"
-                className="select select-bordered"
-                value={authorId}
-                onChange={(e) => setAuthorId(e.target.value)}
-              >
-                <option value="">Select an author</option>
-                {authors.map((author) => (
-                  <option key={author.id} value={author.id}>
-                    {author.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-control mt-6">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Submitting..." : "Submit"}
-              </button>
-            </div>
+            <VStack spacing={4}>
+              <FormControl isRequired>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Author</FormLabel>
+                <Input
+                  type="text"
+                  value={author}
+                  onChange={(e) => setAuthor(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Description</FormLabel>
+                <Textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Genre</FormLabel>
+                <Input
+                  type="text"
+                  value={genre}
+                  onChange={(e) => setGenre(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Year</FormLabel>
+                <Input
+                  type="number"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Cover URL</FormLabel>
+                <Input
+                  type="url"
+                  value={coverURL}
+                  onChange={(e) => setCoverURL(e.target.value)}
+                />
+              </FormControl>
+              <Button type="submit" colorScheme="teal" size="lg" width="full">
+                Update Book
+              </Button>
+            </VStack>
           </form>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </MotionBox>
+    </Container>
   );
 }
 

@@ -1,60 +1,124 @@
-/* eslint-disable no-unused-vars */
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import authorsService from "../services/author.service";
-import AuthorCard from "../components/authorCard";
-import { Box, Text, Heading } from "@chakra-ui/react";
-import PacmanLoader from "react-spinners/PacmanLoader";
+import { useParams, useNavigate } from "react-router-dom";
+import authorService from "../services/author.service";
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  VStack,
+  HStack,
+  Spinner,
+  useToast,
+  Container,
+} from "@chakra-ui/react";
+import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 function AuthorDetails() {
-  const { authorId } = useParams();
-
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [loader, setLoader] = useState(false);
+  const { authorId } = useParams();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     const fetchAuthor = async () => {
       try {
-        const response = await authorsService.getAuthor(authorId);
+        const response = await authorService.getAuthor(authorId);
         setAuthor(response.data);
-        setLoading(false);
-        console.log("Response from server:", response);
       } catch (error) {
-        console.log("Error fetching author:", error);
+        console.error("Error fetching author:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch author details",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } finally {
+        setLoading(false);
       }
     };
     fetchAuthor();
-  }, [authorId]);
+  }, [authorId, toast]);
+
+  const handleDeleteAuthor = async () => {
+    try {
+      await authorService.deleteAuthor(authorId);
+      toast({
+        title: "Author deleted",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate("/authors");
+    } catch (error) {
+      console.error("Error deleting author:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete author",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box textAlign="center" mt={20}>
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
+
+  if (!author) {
+    return <Box textAlign="center">Author not found</Box>;
+  }
 
   return (
-    <div className="flex flex-col items-center my-40">
-      <Box p={4}>
-        <h2 className="text-3xl font-bold underline my-8 text-center">
-          Author Details
-        </h2>
-
-        {loading ? (
-          <PacmanLoader show={loader} heightUnit={150} />
-        ) : (
-          <Box>
-            <Heading
-              size="md"
-              mb={3}
-              p={6}
-              m={6}
-              style={{
-                fontSize: "1.5rem",
-                textAlign: "center",
-                textDecoration: "underline",
-              }}
-            ></Heading>
-            <AuthorCard author={author} />
-          </Box>
-        )}
-      </Box>
-      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
-    </div>
+    <Container maxW="container.xl" py={20}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box
+          borderWidth="1px"
+          borderRadius="lg"
+          overflow="hidden"
+          boxShadow="xl"
+          bg="white"
+          p={6}
+        >
+          <VStack align="start" spacing={6}>
+            <Heading as="h2" size="2xl">
+              {author.name}
+            </Heading>
+            <Text fontSize="xl">{author.bio}</Text>
+            <HStack spacing={4}>
+              <Button
+                leftIcon={<EditIcon />}
+                colorScheme="blue"
+                onClick={() => navigate(`/authors/${author._id}/edit`)}
+              >
+                Edit Author
+              </Button>
+              <Button
+                leftIcon={<DeleteIcon />}
+                colorScheme="red"
+                onClick={handleDeleteAuthor}
+              >
+                Delete Author
+              </Button>
+            </HStack>
+          </VStack>
+        </Box>
+      </MotionBox>
+    </Container>
   );
 }
 

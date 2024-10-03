@@ -1,22 +1,32 @@
-/* eslint-disable no-unused-vars */
-
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import booksService from "../services/book.service";
-import BookSummary from "../components/bookSummary";
-import PacmanLoader from "react-spinners/PacmanLoader";
+import BookCard from "../components/BookCard";
+import {
+  Box,
+  Heading,
+  SimpleGrid,
+  Container,
+  Spinner,
+  Button,
+  VStack,
+  Input,
+  HStack,
+} from "@chakra-ui/react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 function BookList() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loader, setLoader] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    // fetch the books from the server using the booksService
     const fetchBooks = async () => {
       try {
         const response = await booksService.getBooks();
         setBooks(response.data);
-        console.log("Response from server:", response);
       } catch (error) {
         console.log("error fetching books:", error);
       } finally {
@@ -26,26 +36,57 @@ function BookList() {
     fetchBooks();
   }, []);
 
-  return (
-    <div className="flex flex-col items-center my-40">
-      <h2 className="text-3xl font-bold underline my-8">Books</h2>
+  const filteredBooks = books.filter(book =>
+    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.author?.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-      {loading ? (
-        <PacmanLoader show={loader} heightUnit={150} />
-      ) : books && Array.isArray(books) ? (
-        <div className="flex flex-wrap justify-center ">
-          {books.map((book) => (
-            <div key={book._id} className="m-4">
-              <BookSummary book={book} /> {/* Pass the book object as a prop */}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>No books found</p>
-      )}
-      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
-    </div>
-    
+  return (
+    <Container maxW="container.xl" py={20}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <VStack spacing={8}>
+          <Heading as="h2" size="xl" textAlign="center">
+            Book List
+          </Heading>
+          <HStack width="full">
+            <Input
+              placeholder="Search books..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Button as={Link} to="/books/add" colorScheme="teal">
+              Add New Book
+            </Button>
+          </HStack>
+          {loading ? (
+            <Spinner size="xl" />
+          ) : (
+            <AnimatePresence>
+              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+                {filteredBooks.map((book) => (
+                  <MotionBox
+                    key={book._id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <BookCard book={book} />
+                  </MotionBox>
+                ))}
+              </SimpleGrid>
+            </AnimatePresence>
+          )}
+          {!loading && filteredBooks.length === 0 && (
+            <Box textAlign="center">No books found</Box>
+          )}
+        </VStack>
+      </MotionBox>
+    </Container>
   );
 }
 

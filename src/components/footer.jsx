@@ -1,49 +1,50 @@
 import { Link } from "react-router-dom";
 import { IoLogoLinkedin, IoLogoGithub, IoPersonCircle } from "react-icons/io5";
+import { Box, Flex, Text, IconButton, useColorModeValue } from "@chakra-ui/react";
 
 function Footer() {
   const date = new Date().getFullYear();
+  const bgColor = useColorModeValue("gray.100", "gray.900");
+  const textColor = useColorModeValue("gray.600", "gray.400");
 
   return (
-    
-    <footer className="footer p-2 bg-neutral text-neutral-content flex justify-center items-center" style={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 1000, marginTop: '600px' }}>
-    
-      <p className="mr-4">
-       
-        <Link
-          to={"https://mchito.netlify.app"}
-          className="text-xs  font-bold text-neutral-content"
-        >
-          Copyright © Miguel Chito {date}
-        </Link>
-      </p>
-      <div className="flex items-center">
-        <Link
-          to={"https://www.linkedin.com/in/miguelchito-reactdeveloper"}
-          className="link link-hover text-xl"
-        >
-          <IoLogoLinkedin />
-        </Link>
-
-        <Link
-          to={"https://github.com/donxito"}
-          className="link link-hover text-xl ml-2"
-        >
-          <IoLogoGithub />
-        </Link>
-
-        <Link
-          to={"https://mchito.netlify.app"}
-          className="link link-hover text-xl ml-2"
-        >
-          <IoPersonCircle />
-        </Link>
-
-      </div>
-
-      
-  
-    </footer>
+    <Box as="footer" bg={bgColor} color={textColor} py={1} position="fixed" bottom={0} width="100%" zIndex={1000} boxShadow="md">
+      <Flex justifyContent="center" alignItems="center" flexWrap="wrap">
+        <Text fontSize="sm" mr={4}>
+          <Link to="https://mchito.vercel.app" className="font-bold">
+            Copyright © Miguel Chito {date}
+          </Link>
+        </Text>
+        <Flex>
+          <IconButton
+            as={Link}
+            to="https://www.linkedin.com/in/miguelchito-reactdeveloper"
+            aria-label="LinkedIn"
+            icon={<IoLogoLinkedin />}
+            size="sm"
+            variant="ghost"
+            mr={2}
+          />
+          <IconButton
+            as={Link}
+            to="https://github.com/donxito"
+            aria-label="GitHub"
+            icon={<IoLogoGithub />}
+            size="sm"
+            variant="ghost"
+            mr={2}
+          />
+          <IconButton
+            as={Link}
+            to="https://mchito.vercel.app"
+            aria-label="Personal Website"
+            icon={<IoPersonCircle />}
+            size="sm"
+            variant="ghost"
+          />
+        </Flex>
+      </Flex>
+    </Box>
   );
 }
 

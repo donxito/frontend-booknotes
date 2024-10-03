@@ -1,189 +1,200 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
 import booksService from "../services/book.service";
 import AddNote from "../components/addNote";
-import notesService from "../services/notes.service";
-import userService from "../services/user.service";
-import { AuthContext } from "../context/auth.context";
-import PacmanLoader from "react-spinners/PacmanLoader";
+import {
+  Box,
+  Image,
+  Heading,
+  Text,
+  Button,
+  VStack,
+  HStack,
+  Badge,
+  Spinner,
+  useToast,
+  Container,
+  Divider,
+} from "@chakra-ui/react";
+import { StarIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { motion, AnimatePresence } from "framer-motion";
 
-import BookCard from "../components/BookCard";
-
-import { Box, Text, Heading, Divider, Center, Grid } from "@chakra-ui/react";
+const MotionBox = motion(Box);
 
 function BookDetails() {
-  const { bookId } = useParams();
-
-  const { isLoggedIn } = useContext(AuthContext);
-
   const [book, setBook] = useState(null);
-  const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loader, setLoader] = useState(false);
+  const { bookId } = useParams();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const toast = useToast();
 
-  // fetch the book and notes from the server using the booksService
   useEffect(() => {
-    const fetchBookAndNotes = async () => {
+    const fetchBook = async () => {
       try {
-        const bookResponse = await booksService.getBook(bookId);
-        console.log("fetched book:", bookResponse.data);
-        setBook(bookResponse.data);
-        setLoading(false);
+        const response = await booksService.getBook(bookId);
+        setBook(response.data);
       } catch (error) {
         console.error("Error fetching book:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch book details",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } finally {
+        setLoading(false);
       }
     };
+    fetchBook();
+  }, [bookId, toast]);
 
-    fetchBookAndNotes();
-  }, [bookId]);
-
-  // Fetch notes for the book
-  useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        const notesResponse = await notesService.getNotesByBookId(bookId);
-        let fetchedNotes = notesResponse.data;
-        console.log("fetched notes:", fetchedNotes);
-
-        // Fetch user info for each note
-        const notesWithUser = await Promise.all(
-          fetchedNotes.map(async (note) => {
-            const userResponse = await userService.getUser(note.user);
-            return {
-              ...note,
-              user: userResponse.data, // Replace user ID with user info
-            };
-          })
-        );
-
-        // Sort notes by createdAt timestamp in ascending order
-        const sortedNotes = notesWithUser.sort(
-          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-        );
-        console.log("sorted notes:", sortedNotes);
-
-        // Update the state with sorted notes
-        setNotes(sortedNotes);
-      } catch (error) {
-        console.error("Error fetching notes:", error);
-      }
-    };
-    if (book) {
-      fetchNotes();
+  const handleDeleteBook = async () => {
+    try {
+      await booksService.deleteBook(bookId);
+      toast({
+        title: "Book deleted",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate("/books");
+    } catch (error) {
+      console.error("Error deleting book:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete book",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
-  }, [bookId, book, setNotes]);
+  };
 
-  console.log("rendering notes", notes);
+  const handleNoteAdded = (newNote) => {
+    setBook((prevBook) => ({
+      ...prevBook,
+      notes: [...prevBook.notes, newNote],
+    }));
+  };
+
+  if (loading) {
+    return (
+      <Box textAlign="center" mt={20}>
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
+
+  if (!book) {
+    return <Box textAlign="center">Book not found</Box>;
+  }
+
+  const isBookOwner = book.reader && user && book.reader._id === user._id;
 
   return (
-    <div className="flex flex-col items-center my-40">
-      <Box p={4}>
-        <h2 className="text-3xl font-bold underline my-8 text-center">
-          Book Details
-        </h2>
-        {loading ? (
-          <PacmanLoader show={loader} heightUnit={150} />
-        ) : book ? (
-          <>
-            <Box w="full" my={4}>
-              <BookCard book={book} />
-            </Box>
-
-            <Divider my={40} />
-
-            <Box>
-              <Heading
-                size="md"
-                mb={3}
-                p={6}
-                m={10}
-                style={{
-                  fontSize: "1.5rem",
-                  textAlign: "center",
-                  textDecoration: "underline",
-                }}
-              >
-                "{book.title}" notes
+    <Container maxW="container.xl" py={20}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box
+          borderWidth="1px"
+          borderRadius="lg"
+          overflow="hidden"
+          boxShadow="xl"
+          bg="white"
+          p={6}
+        >
+          <HStack spacing={8} align="start">
+            <Image
+              src={book.coverURL}
+              alt={book.title}
+              objectFit="cover"
+              boxSize="300px"
+              borderRadius="md"
+            />
+            <VStack align="start" spacing={4} flex={1}>
+              <Heading as="h2" size="2xl">
+                {book.title}
               </Heading>
+              <Text fontSize="xl" fontWeight="bold">
+                by {book.author?.name}
+              </Text>
+              <HStack>
+                <Badge colorScheme="purple">{book.genre}</Badge>
+                <Badge colorScheme="green">{book.year}</Badge>
+              </HStack>
+              <Text fontSize="md">Posted by: {book.reader?.name}</Text>
+              <HStack spacing={1}>
+                {[...Array(5)].map((_, index) => (
+                  <StarIcon
+                    key={index}
+                    color={index < book.rating ? "yellow.400" : "gray.300"}
+                  />
+                ))}
+              </HStack>
+              <Text fontSize="md">{book.description}</Text>
+              {isBookOwner && (
+                <HStack spacing={4}>
+                  <Button
+                    leftIcon={<EditIcon />}
+                    colorScheme="blue"
+                    onClick={() => navigate(`/books/${book._id}/edit`)}
+                  >
+                    Edit Book
+                  </Button>
+                  <Button
+                    leftIcon={<DeleteIcon />}
+                    colorScheme="red"
+                    onClick={handleDeleteBook}
+                  >
+                    Delete Book
+                  </Button>
+                </HStack>
+              )}
+            </VStack>
+          </HStack>
 
-              {/* Display notes */}
-              <Grid
-                templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
-                gap={4}
-              >
-                {notes && notes.length > 0 ? (
-                  notes.map((note) => (
-                    <Box
-                      key={note._id}
-                      p={4} 
-                      m={8} 
-                      boxShadow="lg"
-                      borderRadius="lg"
-                      borderWidth="1px"
-                      borderColor="gray.300"
-                      backgroundColor="gray.200"
-                      style={{ maxHeight: "300px", overflowY: "auto" }} 
-                    >
-                      <Text
-                        style={{
-                          textAlign: "left",
-                          fontSize: "18px",
-                          lineHeight: "1.4",
-                          padding: "8px",
-                          margin: "8px",
-                          wordWrap: "break-word", // Enable word wrapping
-                        }}
-                      >
-                        {note.content}
-                      </Text>
-                      <Box>
-                        <Text
-                          style={{
-                            textAlign: "right",
-                            fontSize: "16px",
-                            color: "gray",
-                            fontStyle: "italic",
-                            padding: "8px",
-                            margin: "8px",
-                          }}
-                        >
-                          {note.user.name}
-                          <Text
-                            style={{
-                              fontSize: "12px",
-                              color: "gray",
-                              fontStyle: "italic",
-                            }}
-                          >
-                            {new Date(note.createdAt).toLocaleDateString()}
-                          </Text>
-                        </Text>
-                      </Box>
-                    </Box>
-                  ))
-                ) : (
-                  <Text>No notes available for this book.</Text>
-                )}
-              </Grid>
-            </Box>
-            {/* Allow only logged-in users to add notes */}
-            {console.log("isLoggedIn:", isLoggedIn)}
-            {isLoggedIn && (
-              <AddNote
-                bookId={book._id}
-                onNoteAdded={(newNote) => setNotes([...notes, newNote])}
-              />
-            )}
-          </>
-        ) : (
-          <Center>Book not found</Center>
-        )}
-      </Box>
-      <div className="spacer" style={{ height: "500px" }}></div>{" "}
-      {/* Placeholder element */}
-    </div>
+          <Divider my={8} />
+
+          <VStack align="start" spacing={6}>
+            <Heading as="h3" size="lg">
+              Notes
+            </Heading>
+            <AnimatePresence>
+              {book.notes.map((note) => (
+                <MotionBox
+                  key={note._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  borderWidth="1px"
+                  borderRadius="md"
+                  p={4}
+                  width="full"
+                >
+                  <Text fontSize="md">{note.content}</Text>
+                  <HStack justify="space-between" mt={2}>
+                    <Text fontSize="sm" color="gray.500">
+                      {note.user.name}
+                    </Text>
+                    <Text fontSize="sm" color="gray.500">
+                      {new Date(note.createdAt).toLocaleDateString()}
+                    </Text>
+                  </HStack>
+                </MotionBox>
+              ))}
+            </AnimatePresence>
+            <AddNote bookId={book._id} onNoteAdded={handleNoteAdded} />
+          </VStack>
+        </Box>
+      </MotionBox>
+    </Container>
   );
 }
 

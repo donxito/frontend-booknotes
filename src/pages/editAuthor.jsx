@@ -1,101 +1,125 @@
-/* eslint-disable no-unused-vars */
-import { useState, useEffect } from "react"
-import { useParams, useNavigate, Link } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import authorService from "../services/author.service";
+import {
+  Box,
+  Heading,
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  Button,
+  VStack,
+  useToast,
+  Container,
+  Spinner,
+} from "@chakra-ui/react";
+import { motion } from "framer-motion";
 
-import booksService from "../services/book.service";
-import authorsService from "../services/author.service";
-
-
+const MotionBox = motion(Box);
 
 function EditAuthor() {
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [loading, setLoading] = useState(true);
 
-    const [name, setName] = useState("");
-    const [bio, setBio] = useState("");
-    const [books, setBooks] = useState([]);
+  const { authorId } = useParams();
+  const navigate = useNavigate();
+  const toast = useToast();
 
-    const navigate = useNavigate();
-
-    const { authorId } = useParams();
-    
-    useEffect(() => {
-        authorsService
-        .getAuthor(authorId)
-        .then((response) => {
-            const author = response.data;
-            setName(author.name);
-            setBio(author.bio);
-        })
-        .catch((error) => {
-            console.log(error);
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      try {
+        const response = await authorService.getAuthor(authorId);
+        const author = response.data;
+        setName(author.name);
+        setBio(author.bio);
+      } catch (error) {
+        console.error("Error fetching author:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch author details",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
         });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAuthor();
+  }, [authorId, toast]);
 
-        booksService
-        .getBooks()
-        .then((response) => {
-            const books = response.data;
-            setBooks(books);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }, [authorId])
-
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-        const requestBody = {
-            name,
-            bio
-        };
-        authorsService
-            .updateAuthor(authorId, requestBody)
-            .then((response) => {
-                console.log("Author updated successfully:", response);
-                navigate(`/authors/${authorId}`);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const updatedAuthor = { name, bio };
+      await authorService.updateAuthor(authorId, updatedAuthor);
+      toast({
+        title: "Author updated",
+        description: "The author has been successfully updated",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate(`/authors/${authorId}`);
+    } catch (error) {
+      console.error("Error updating author:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update author",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
+  };
 
+  if (loading) {
     return (
-        <div className="flex justify-center items-center min-h-screen my-40">
-          <div className="card w-96 bg-base-100 shadow-xl my-8">
-            <div className="card-body">
-              <h2 className="card-title">Edit Author</h2>
-              <form onSubmit={handleFormSubmit}>
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Name:</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Author Name"
-                    className="input input-bordered"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                  />
-                </div>
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Bio:</span>
-                  </label>
-                  <textarea
-                    type="text"
-                    placeholder="Write a short bio"
-                    className="input input-bordered"
-                    value={bio}
-                    onChange={(event) => setBio(event.target.value)}
-                  />
-                </div>
-                <div className="form-control mt-6">
-                  <button className="btn btn-primary">Edit Author</button>
-                </div>
-              </form>
-            </div>
-          </div>
-          <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
-        </div>
-      );
-    }
+      <Box textAlign="center" mt={20}>
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
 
-export default EditAuthor
+  return (
+    <Container maxW="container.md" py={20}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box bg="white" p={8} borderRadius="lg" boxShadow="xl">
+          <Heading as="h2" size="xl" textAlign="center" mb={8}>
+            Edit Author
+          </Heading>
+          <form onSubmit={handleFormSubmit}>
+            <VStack spacing={4}>
+              <FormControl isRequired>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Bio</FormLabel>
+                <Textarea
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                />
+              </FormControl>
+              <Button type="submit" colorScheme="teal" size="lg" width="full">
+                Update Author
+              </Button>
+            </VStack>
+          </form>
+        </Box>
+      </MotionBox>
+    </Container>
+  );
+}
+
+export default EditAuthor;

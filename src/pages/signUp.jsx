@@ -1,117 +1,129 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-children-prop */
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
-
-
-import { Input, Button } from "react-daisyui";
 import {
-  FaEnvelope,
-  FaLock,
-  FaUserCircle,
-  FaUser
-} from "react-icons/fa";
+  Box,
+  Heading,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  VStack,
+  useToast,
+  Container,
+  InputGroup,
+  InputLeftElement,
+} from "@chakra-ui/react";
+import { EmailIcon, LockIcon, InfoIcon } from "@chakra-ui/icons";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [about, setAbout] = useState("");
-  const [books, setBooks] = useState([]);
-  const [notes, setNotes] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+  const toast = useToast();
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const requestBody = {
-      name,
-      email,
-      password,
-      about,
-      books,
-      notes,
-    };
-    authService
-      .signup(requestBody)
-      .then((response) => {
-        setLoading(false);
-        navigate("/login");
-      })
-      .catch((error) => {
-        setLoading(false);
-        setError(error.response.data.message);
+    try {
+      const requestBody = { name, email, password, about };
+      await authService.signup(requestBody);
+      toast({
+        title: "Account created",
+        description: "You've successfully signed up!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
       });
+      navigate("/login");
+    } catch (error) {
+      console.error("Error signing up:", error);
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to sign up",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
-    <div className="SignUpPage p-6 bg-white shadow-md rounded-md max-w-md mx-auto my-40">
-      <h2 className="text-2xl font-bold mb-7">Sign Up</h2>
-
-      <form onSubmit={handleFormSubmit}>
-        <div className="flex items-center mb-4">
-          <span className="mr-2">
-            <FaEnvelope />
-          </span>
-          <Input
-            type="text"
-            name="email"
-            placeholder="your@email.com"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            label="Email:"
-            icon="bx bx-envelope"
-          />
-        </div>
-
-        <div className="flex items-center mb-4">
-          <span className="mr-2">
-            <FaLock />
-          </span>
-          <Input
-            type="password"
-            name="password"
-            placeholder="******"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            label="Password:"
-            icon="bx bx-lock"
-          />
-        </div>
-
-        <div className="flex items-center mb-4">
-          <span className="mr-2">
-            <FaUserCircle />
-          </span>
-          <Input
-            type="text"
-            name="name"
-            placeholder="Your name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            label="Name:"
-            icon="bx bx-user"
-          />
-        </div>
-
-        <div className="mb-2">
-          <Button type="submit" className="btn mt-4" disabled={loading}>
-            {loading ? "Signing Up..." : "Sign Up"}
-          </Button>
-          {error && <p className="text-red-500 mt-4">{error}</p>}
-        </div>
-        <div className="mb-2 my-8">
-          <p>Already have an account?</p>
-        </div>
-        <Link to="/login" className="btn btn-active btn-secondary">
-          Login
-        </Link>
-      </form>
-      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
-    </div>
+    <Container maxW="container.md" py={20}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box bg="white" p={8} borderRadius="lg" boxShadow="xl">
+          <Heading as="h2" size="xl" textAlign="center" mb={8}>
+            Sign Up
+          </Heading>
+          <form onSubmit={handleFormSubmit}>
+            <VStack spacing={4}>
+              <FormControl isRequired>
+                <FormLabel>Name</FormLabel>
+                <InputGroup>
+                  <InputLeftElement children={<InfoIcon color="gray.300" />} />
+                  <Input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    bg="gray.50" 
+                  />
+                </InputGroup>
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <InputGroup>
+                  <InputLeftElement children={<EmailIcon color="gray.300" />} />
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    bg="gray.50" 
+                  />
+                </InputGroup>
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <InputLeftElement children={<LockIcon color="gray.300" />} />
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="********"
+                    bg="gray.50" 
+                  />
+                </InputGroup>
+              </FormControl>
+              <FormControl>
+                <FormLabel>About</FormLabel>
+                <Input
+                  type="text"
+                  value={about}
+                  onChange={(e) => setAbout(e.target.value)}
+                  placeholder="Tell us about yourself"
+                  bg="gray.50" 
+                />
+              </FormControl>
+              <Button type="submit" colorScheme="teal" size="lg" width="full">
+                Sign Up
+              </Button>
+            </VStack>
+          </form>
+        </Box>
+      </MotionBox>
+    </Container>
   );
 }
 

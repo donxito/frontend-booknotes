@@ -1,88 +1,75 @@
 /* eslint-disable react/prop-types */
-
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
-import { AuthContext} from "../context/auth.context";
-import iconStarEmpty from "../assets/star_empty.svg";
-import iconStarFull from "../assets/star_full.svg";
+import { AuthContext } from "../context/auth.context";
+import { Box, Image, Heading, Text, Button, VStack, HStack, Badge } from "@chakra-ui/react";
+import { StarIcon } from "@chakra-ui/icons";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 function BookSummary({ book }) {
-
   const { user } = useContext(AuthContext);
-
-  // Rating
-  const [bookRating, setBookRating] = useState(() => {
+  const   [bookRating, setBookRating] = useState(() => {
     const storedRating = localStorage.getItem(`bookRating_${book._id}`);
-    return storedRating ? parseInt(storedRating) : (book.rating || 0);
+    return storedRating ? parseInt(storedRating) : book.rating || 0;
   });
 
   const navigate = useNavigate();
 
-  // Rating
   const handleRatingChange = (newRating) => {
-    // Allow only the user who posted the book to change the rating
     if (book.reader && book.reader._id === user._id) {
       setBookRating(newRating);
       localStorage.setItem(`bookRating_${book._id}`, newRating);
     }
-  }
+  };
 
   return (
-    <div className="card card-side bg-base-200 border border-gray-300 shadow-md rounded-md max-w-md mx-auto">
-      <div className="md:flex">
-        <figure>
-          <img
-            src={book.coverURL}
-            alt={book.title}
-            className="h-64 w-full object-cover md:h-full md:w-48"
-          />
-        </figure>
-        <div className="card-body">
-          <h2 className="card-title text-2xl my-2">{book.title}</h2>
-          
-          <p className="text-sm mb-2">
-            <strong>Author: </strong>
-            {book.author?.name}
-          </p>
-
-          <p className="text-sm mb-2">
-            <strong>Genre: </strong>
-            {book.genre}
-          </p>
-
-          <p className="text-sm mb-2">
-            <strong>Year: </strong>
-            {book.year}
-          </p>
-          <p className="text-sm mb-2">
-            <strong>Posted by: </strong>
-            {book.reader?.name}
-          </p>
-
-          <div className="flex items-center">
+    <MotionBox
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      boxShadow="lg"
+      bg="white"
+    >
+      <Image src={book.coverURL} alt={book.title} objectFit="cover" height="300px" width="100%" />
+      <Box p={6}>
+        <VStack align="start" spacing={3}>
+          <Heading as="h3" size="lg" isTruncated>
+            {book.title}
+          </Heading>
+          <Text fontSize="md" color="gray.500">
+            by {book.author?.name}
+          </Text>
+          <HStack>
+            <Badge colorScheme="purple">{book.genre}</Badge>
+            <Badge colorScheme="green">{book.year}</Badge>
+          </HStack>
+          <Text fontSize="sm" color="gray.600">
+            Posted by: {book.reader?.name}
+          </Text>
+          <HStack spacing={1}>
             {[...Array(5)].map((_, index) => (
-              <img
+              <StarIcon
                 key={index}
-                src={index < bookRating ? iconStarFull : iconStarEmpty}
-                alt={index < bookRating ? "Full Star" : "Empty Star"}
-                className="h-5 w-5 cursor-pointer"
+                color={index < bookRating ? "yellow.400" : "gray.300"}
+                cursor="pointer"
                 onClick={() => handleRatingChange(index + 1)}
               />
             ))}
-          </div>
-
-          <div className="card-actions justify-end my-4">
-            <button
-              fontWeight="bold"
-              className="btn btn-primary"
-              onClick={() => navigate(`/books/${book._id}`)}
-            >
-              Book Details
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          </HStack>
+          <Button
+            colorScheme="teal"
+            onClick={() => navigate(`/books/${book._id}`)}
+            width="full"
+          >
+            Book Details
+          </Button>
+        </VStack>
+      </Box>
+    </MotionBox>
   );
 }
 

@@ -1,76 +1,110 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-children-prop */
 import { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import authService from "../services/auth.service";
-import { Input, Button } from "react-daisyui";
+import {
+  Box,
+  Heading,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  VStack,
+  useToast,
+  Container,
+  InputGroup,
+  InputLeftElement,
+} from "@chakra-ui/react";
+import { EmailIcon, LockIcon } from "@chakra-ui/icons";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(undefined);
+  const [ setErrorMessage] = useState(undefined);
 
   const navigate = useNavigate();
-
   const { storeToken, authenticateUser } = useContext(AuthContext);
+  const toast = useToast();
 
-  const handleEmail = (event) => setEmail(event.target.value);
-  const handlePassword = (event) => setPassword(event.target.value);
-
-  const handleLoginSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const requestBody = { email, password };
-   
-    authService
-      .login(requestBody)
-      .then((response) => {
-        storeToken(response.data.authToken);
-        authenticateUser();
-        navigate("/profile");
-        
-      })
-      .catch((error) => {
-        const errorDescription = error.response.data.message;
-        console.log("Error Description:", errorDescription);
+    try {
+      const response = await authService.login({ email, password });
+      storeToken(response.data.authToken);
+      authenticateUser();
+      toast({
+        title: "Login successful",
+        description: "Welcome back!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
       });
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging in:", error);
+      const errorDescription = error.response?.data?.message || "An error occurred during login";
+      setErrorMessage(errorDescription);
+      toast({
+        title: "Login failed",
+        description: errorDescription,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
-    <div className="LoginPage p-6 bg-white shadow-md rounded-md max-w-md mx-auto my-40">
-      <h2 className="text-2xl font-bold mb-4 my-8">Login</h2>
-
-      <form onSubmit={handleLoginSubmit}>
-        <label className="block mb-2">Email:</label>
-        <Input
-          type="email"
-          name="email"
-          placeholder="your@email.com"
-          value={email}
-          onChange={handleEmail}
-        />
-
-        <label className="block mb-2">Password:</label>
-        <Input
-          type="password"
-          name="password"
-          placeholder="**********"
-          value={password}
-          onChange={handlePassword}
-        />
-
-        <Button type="submit" className="btn ml-4">
-          Login
-        </Button>
-      </form>
-
-      {errorMessage && <p className="error-message mt-4">{errorMessage}</p>}
-
-      <p className="mt-4">Do not have an account yet?</p>
-      <Link to="/signup" className="text-blue-500">
-        Sign Up
-      </Link>
-      <div className="spacer" style={{ height: '500px' }}></div> {/* Placeholder element */}
-    </div>
+    <Container maxW="container.md" py={20}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box bg="white" p={8} borderRadius="lg" boxShadow="xl">
+          <Heading as="h2" size="xl" textAlign="center" mb={8}>
+            Log In
+          </Heading>
+          <form onSubmit={handleFormSubmit}>
+            <VStack spacing={4}>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <InputGroup>
+                  <InputLeftElement children={<EmailIcon color="gray.300" />} />
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    bg="gray.50" 
+                  />
+                </InputGroup>
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <InputLeftElement children={<LockIcon color="gray.300" />} />
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="********"
+                    bg="gray.50" 
+                  />
+                </InputGroup>
+              </FormControl>
+              <Button type="submit" colorScheme="teal" size="lg" width="full">
+                Log In
+              </Button>
+            </VStack>
+          </form>
+        </Box>
+      </MotionBox>
+    </Container>
   );
 }
 
