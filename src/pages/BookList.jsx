@@ -59,7 +59,7 @@ function BookList() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Button as={Link} to="/books/add" colorScheme="teal">
-              Add New Book
+              Add Book 
             </Button>
           </HStack>
           {loading ? (
