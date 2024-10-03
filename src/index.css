@@ -17,6 +17,12 @@
 
 /*  MAIN CSS   */
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 #root,
 html,
 body {
@@ -28,6 +34,7 @@ body {
   font-family:  'Proza Libre',sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f0f4f8;
 
 
 }

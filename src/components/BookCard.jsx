@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import { Box, Image, Heading, Text, Button, VStack, HStack, Badge } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
-import { motion } from "framer-motion";
 
-const MotionBox = motion(Box);
+
 
 function BookCard({ book }) {
   const { user } = useContext(AuthContext);
@@ -15,9 +14,7 @@ function BookCard({ book }) {
   const isBookOwner = book.reader && user && book.reader._id === user._id;
 
   return (
-    <MotionBox
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+    <Box
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
@@ -76,7 +73,7 @@ function BookCard({ book }) {
           )}
         </VStack>
       </Box>
-    </MotionBox>
+    </Box>
   );
 }
 
