@@ -24,7 +24,7 @@ function BookCard({ book }) {
       <Image src={book.coverURL} alt={book.title} objectFit="cover" height="300px" width="100%" />
       <Box p={6}>
         <VStack align="start" spacing={3}>
-          <Heading as="h3" size="lg" isTruncated>
+          <Heading as="h4" size="md" isTruncated>
             {book.title}
           </Heading>
           <Text fontSize="md" color="gray.500">
